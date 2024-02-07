@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { inter, poppins } from "@/lib/fonts";
+import { Header } from "@/components/header/Header";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,7 +15,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-br">
-      <body className={`${inter.variable} ${poppins.variable} font-poppins`}>{children}</body>
+      <body className={`${inter.variable} ${poppins.variable} font-poppins antialiased`}>
+        <Header />
+        <main>{children}</main>
+      </body>
     </html>
   );
 }
