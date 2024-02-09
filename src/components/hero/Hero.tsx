@@ -15,7 +15,7 @@ export default function Hero() {
             RECOMENDAÇÕES
           </h1>
           <p className="text-slate-200 text-sm leading-6 text-pretty">
-            Veja as principais indicações que a galera está compartilhando no
+            Veja as principais recomendações que a galera está compartilhando no
             RIFT! livros, músicas, séries e filmes que a nossa comunidade
             recomenda. Conecte-se às sugestões e embarque nessa jornada de
             descobertas!
@@ -31,7 +31,7 @@ export default function Hero() {
           </Link>
         </div>
 
-        <Link href="#" className="translate-y-16 text-primary">
+        <Link href="#book-section" className="translate-y-16 text-primary">
           <ChevronDown size="3rem" className="animate-bounce" />
         </Link>
       </div>
