@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signInSchema, SignInType } from "@/schemas/form";
+import { signUpSchema, SignUpType } from "@/schemas/form";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,14 +16,14 @@ import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 
-export default function SignInForm() {
+export default function SignUpForm() {
   const [shouldShowPassword, setShouldShowPassword] = useState(false);
 
-  const form = useForm<SignInType>({
-    resolver: zodResolver(signInSchema),
+  const form = useForm<SignUpType>({
+    resolver: zodResolver(signUpSchema),
   });
 
-  function onSubmit(values: SignInType) {
+  function onSubmit(values: SignUpType) {
     console.log(values);
   }
 
@@ -37,7 +37,7 @@ export default function SignInForm() {
             <FormItem>
               <FormLabel>E-mail</FormLabel>
               <FormControl>
-                <Input data-testid="signInInput" {...field} />
+                <Input data-testid="signUpInput" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -49,11 +49,11 @@ export default function SignInForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Senha</FormLabel>
+              <FormLabel>Senha*</FormLabel>
               <div className="flex gap-4">
                 <FormControl>
                   <Input
-                    data-testid="signInInput"
+                    data-testid="signUpInput"
                     type={shouldShowPassword ? "text" : "password"}
                     {...field}
                   />
@@ -62,7 +62,41 @@ export default function SignInForm() {
                   type="button"
                   onClick={() => setShouldShowPassword(!shouldShowPassword)}
                 >
-                  {shouldShowPassword ? <Eye /> : <EyeOff className="text-muted-foreground" />}
+                  {shouldShowPassword ? (
+                    <Eye />
+                  ) : (
+                    <EyeOff className="text-muted-foreground" />
+                  )}
+                </button>
+              </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="confirmPassword"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Confime sua senha*</FormLabel>
+              <div className="flex gap-4">
+                <FormControl>
+                  <Input
+                    data-testid="signUpInput"
+                    type={shouldShowPassword ? "text" : "password"}
+                    {...field}
+                  />
+                </FormControl>
+                <button
+                  type="button"
+                  onClick={() => setShouldShowPassword(!shouldShowPassword)}
+                >
+                  {shouldShowPassword ? (
+                    <Eye />
+                  ) : (
+                    <EyeOff className="text-muted-foreground" />
+                  )}
                 </button>
               </div>
               <FormMessage />
@@ -70,7 +104,7 @@ export default function SignInForm() {
           )}
         />
         <Button type="submit" className="w-full py-6">
-          Entrar
+          Criar conta
         </Button>
       </form>
     </Form>

@@ -18,14 +18,9 @@ export function Header() {
       <Nav className="hidden lg:block" />
 
       {!isLogin ? (
-        <div className="space-x-4">
-          <Link href="/login">
-            <Button variant="default">Login</Button>
-          </Link>
-          <Link href="/register">
-            <Button variant="secondary">Registrar</Button>
-          </Link>
-        </div>
+        <Link href="/register">
+          <Button variant="default">Entrar</Button>
+        </Link>
       ) : (
         <ProfileDropDown />
       )}
