@@ -5,10 +5,25 @@ import { Button } from "@/components/ui/button";
 import GoogleIcon from "public/google";
 import SignInForm from "@/components/form/SignInForm";
 import SignUpForm from "@/components/form/SignUpForm";
+import { toast } from "sonner";
 import { useState } from "react";
+import { useAuthContext } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
   const [currentTab, setCurrentTab] = useState<"sign-in" | "sign-up">("sign-in")
+  const router = useRouter()
+  const { googleSignIn } = useAuthContext()
+
+  async function handleSigInWithGoogle() {
+    try {
+      await googleSignIn()
+
+      router.push("/")
+    } catch (error) {
+      toast.error('Erro ao fazer login. Tente novamente mais tarde.');
+    }
+  }
 
   return (
     <section className="flex items-center justify-center h-screen bg-primary">
@@ -24,6 +39,7 @@ export default function RegisterPage() {
             <Button
               variant="ghost"
               className="flex items-center gap-2 shadow-md w-full py-6"
+              onClick={handleSigInWithGoogle}
             >
               <GoogleIcon width={20} height={20} />
               Entrar com Google
@@ -45,6 +61,7 @@ export default function RegisterPage() {
             <Button
               variant="ghost"
               className="flex items-center gap-2 shadow-md w-full py-6"
+              onClick={handleSigInWithGoogle}
             >
               <GoogleIcon width={20} height={20} />
               Criar com com Google

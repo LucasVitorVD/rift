@@ -8,13 +8,25 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "lucide-react";
+import { useAuthContext } from "@/context/AuthContext";
+import { toast } from "sonner";
 
 export default function ProfileDropDown() {
+  const { user, logOut } = useAuthContext()
+
+  async function handleLogout() {
+    try {
+      await logOut()
+    } catch (error) {
+      toast.error('Erro ao fazer logout. Tente novamente mais tarde.');
+    }
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" />
+          <AvatarImage src={user?.photoURL ?? ""} />
           <AvatarFallback>
             <User />
           </AvatarFallback>
@@ -26,7 +38,7 @@ export default function ProfileDropDown() {
         <DropdownMenuItem>Perfil</DropdownMenuItem>
         <DropdownMenuItem>Minhas recomendações</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-destructive">Sair</DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogout} className="text-destructive">Sair</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
