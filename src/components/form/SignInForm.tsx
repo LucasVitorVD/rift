@@ -14,22 +14,34 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
+import { toast } from "sonner";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import signIn from "@/firebase/auth/signin";
 
 export default function SignInForm() {
   const [shouldShowPassword, setShouldShowPassword] = useState(false);
+  const router = useRouter()
 
   const form = useForm<SignInType>({
     resolver: zodResolver(signInSchema),
   });
 
-  function onSubmit(values: SignInType) {
-    console.log(values);
+  async function handleSigInWithEmailAndPassword(values: SignInType) {
+    const { email, password } = values
+
+    const { error } = await signIn(email, password)
+
+    if (error) {
+      return toast.error('Erro ao fazer login. Tente novamente mais tarde.');
+    } else {
+      router.push("/")
+    }
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(handleSigInWithEmailAndPassword)} className="space-y-8">
         <FormField
           control={form.control}
           name="email"

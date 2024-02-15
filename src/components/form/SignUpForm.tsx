@@ -14,17 +14,29 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
+import { toast } from "sonner";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import signUp from "@/firebase/auth/signup";
 
 export default function SignUpForm() {
   const [shouldShowPassword, setShouldShowPassword] = useState(false);
+  const router = useRouter();
 
   const form = useForm<SignUpType>({
     resolver: zodResolver(signUpSchema),
   });
 
-  function onSubmit(values: SignUpType) {
-    console.log(values);
+  async function onSubmit(values: SignUpType) {
+    const { email, password } = values;
+
+    const { error } = await signUp(email, password);
+
+    if (error) {
+      return toast.error('Erro ao criar conta. Tente novamente mais tarde.');
+    } else {
+      router.push("/");
+    }
   }
 
   return (
