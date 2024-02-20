@@ -8,18 +8,20 @@ import SignUpForm from "@/components/form/SignUpForm";
 import { toast } from "sonner";
 import { useState } from "react";
 import { useAuthContext } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function RegisterPage() {
   const [currentTab, setCurrentTab] = useState<"sign-in" | "sign-up">("sign-in")
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const continueTo = searchParams.get("continueTo")
   const { googleSignIn } = useAuthContext()
 
   async function handleSigInWithGoogle() {
     try {
       await googleSignIn()
 
-      router.push("/")
+      router.replace(continueTo ?? "/")
     } catch (error) {
       toast.error('Erro ao fazer login. Tente novamente mais tarde.');
     }

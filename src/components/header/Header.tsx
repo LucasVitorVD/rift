@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Link from "next/link";
 import Nav from "./Nav";
@@ -6,9 +6,10 @@ import { Button } from "@/components/ui/button";
 import ProfileDropDown from "../profile-dropdown/ProfileDropDown";
 import MobileNav from "./MobileNav";
 import { useAuthContext } from "@/context/AuthContext";
+import Skeleton from "react-loading-skeleton"
 
 export function Header() {
-  const { user } = useAuthContext()
+  const { user, loading } = useAuthContext();
 
   return (
     <header className="flex items-center justify-between px-8 py-6 border-b-2 border-b-slate-200 shadow">
@@ -20,13 +21,15 @@ export function Header() {
 
       <Nav className="hidden lg:block" />
 
-      {!user ? (
+      {loading && <Skeleton circle width={40} height={40} />}
+
+      {!loading && !user && (
         <Link href="/register">
           <Button variant="default">Entrar</Button>
         </Link>
-      ) : (
-        <ProfileDropDown />
       )}
+
+      {user && <ProfileDropDown />}
     </header>
   );
 }

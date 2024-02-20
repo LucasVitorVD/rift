@@ -5,6 +5,8 @@ import "./globals.css";
 import Footer from "@/components/footer/Footer";
 import { Toaster } from 'sonner'
 import { AuthContextProvider } from "@/context/AuthContext";
+import { SkeletonTheme } from "react-loading-skeleton"
+import 'react-loading-skeleton/dist/skeleton.css'
 
 export const metadata: Metadata = {
   title: "RIFT",
@@ -23,9 +25,11 @@ export default function RootLayout({
       >
         <Toaster richColors position="bottom-right" />
         <AuthContextProvider>
+        <SkeletonTheme baseColor="#333333 " highlightColor="#666666">
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />
+        </SkeletonTheme>
         </AuthContextProvider>
       </body>
     </html>
