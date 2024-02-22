@@ -16,26 +16,33 @@ import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import signUp from "@/firebase/auth/signup";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useAuthContext } from "@/context/AuthContext";
+import Loader from "../loader/Loader";
+import { handleAuthError } from "@/lib/utils";
+import { AuthError } from "firebase/auth";
 
 export default function SignUpForm() {
   const [shouldShowPassword, setShouldShowPassword] = useState(false);
+
+  const { signUp } = useAuthContext()
+
   const router = useRouter();
+  const searchParams = useSearchParams()
+  const continueTo = searchParams.get("continueTo")
 
   const form = useForm<SignUpType>({
     resolver: zodResolver(signUpSchema),
   });
 
   async function onSubmit(values: SignUpType) {
-    const { email, password } = values;
+    try {
+      const { email, password } = values;
+      await signUp(email, password)
 
-    const { error } = await signUp(email, password);
-
-    if (error) {
-      return toast.error('Erro ao criar conta. Tente novamente mais tarde.');
-    } else {
-      router.push("/");
+      router.replace(continueTo ?? "/")
+    } catch (error) {
+      toast.error(handleAuthError(error as AuthError));
     }
   }
 
@@ -115,8 +122,8 @@ export default function SignUpForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full py-6">
-          Criar conta
+        <Button type="submit" className="w-full py-6" disabled={form.formState.isSubmitting}>
+          {form.formState.isSubmitting ? <Loader /> : <p>Criar conta</p>}
         </Button>
       </form>
     </Form>

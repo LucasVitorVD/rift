@@ -16,27 +16,40 @@ import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import signIn from "@/firebase/auth/signin";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useAuthContext } from "@/context/AuthContext";
+import { handleAuthError } from "@/lib/utils";
+import Loader from "../loader/Loader";
+import { AuthError } from "firebase/auth";
 
 export default function SignInForm() {
   const [shouldShowPassword, setShouldShowPassword] = useState(false);
+
+  const { signIn } = useAuthContext()
+
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const continueTo = searchParams.get("continueTo")
 
   const form = useForm<SignInType>({
     resolver: zodResolver(signInSchema),
+    defaultValues: {
+      email: "",
+      password: ""
+    },
   });
 
   async function handleSigInWithEmailAndPassword(values: SignInType) {
-    const { email, password } = values
+    try {
+      const { email, password } = values
+      await signIn(email, password)
 
-    const { error } = await signIn(email, password)
-
-    if (error) {
-      return toast.error('Erro ao fazer login. Tente novamente mais tarde.');
-    } else {
-      router.push("/")
+      router.replace(continueTo ?? "/")
+    } catch (error) {
+      toast.error(handleAuthError(error as AuthError))
     }
+
+    form.reset({ email: "", password: "" })
   }
 
   return (
@@ -81,8 +94,8 @@ export default function SignInForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full py-6">
-          Entrar
+        <Button type="submit" className="w-full py-6" disabled={form.formState.isSubmitting}>
+          {form.formState.isSubmitting ? <Loader /> : <p>Entrar</p>}
         </Button>
       </form>
     </Form>
