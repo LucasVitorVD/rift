@@ -26,7 +26,7 @@ export default function ProfileDropDown() {
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar>
-          <AvatarImage src={user?.photoURL ?? ""} />
+          <AvatarImage src={user?.photoURL ?? ""} /> 
           <AvatarFallback>
             <User />
           </AvatarFallback>

@@ -1,13 +1,23 @@
 "use client"
 
 import { createContext, useContext, useState, useEffect } from 'react';
-import { onAuthStateChanged, User, signInWithRedirect, signOut, GoogleAuthProvider } from 'firebase/auth';
+import { 
+  onAuthStateChanged, 
+  User, 
+  signInWithRedirect, 
+  signOut, 
+  GoogleAuthProvider, 
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword
+} from 'firebase/auth';
 import { auth } from '@/firebase/config';
 
 interface AuthContextType {
   user: User | null
   loading: boolean
   googleSignIn: () => void
+  signIn: (email: string, password: string) => void
+  signUp: (email: string, password: string) => void
   logOut: () => void
 }
 
@@ -26,6 +36,22 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     signInWithRedirect(auth, provider)
   }
 
+  const signIn = async (email: string, password: string) => {    
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      throw error
+    }
+  }
+
+  const signUp = async (email: string, password: string) => {
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      throw error
+    }
+  }
+
   const logOut = () => {
     signOut(auth)
   }
@@ -37,10 +63,10 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     });
 
     return () => unsubscribe();
-  }, [user]);
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, googleSignIn, logOut }}>
+    <AuthContext.Provider value={{ user, loading, googleSignIn, logOut, signIn, signUp }}>
       {children}
     </AuthContext.Provider>
   );

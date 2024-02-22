@@ -21,15 +21,13 @@ export function Header() {
 
       <Nav className="hidden lg:block" />
 
-      {loading && <Skeleton circle width={40} height={40} />}
-
-      {!loading && !user && (
+      {!loading && !user ? (
         <Link href="/register">
           <Button variant="default">Entrar</Button>
         </Link>
+      ) : (
+        <ProfileDropDown />
       )}
-
-      {user && <ProfileDropDown />}
     </header>
   );
 }
