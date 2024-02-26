@@ -91,6 +91,7 @@ export default function RegisterPage() {
         preload="none"
         className="w-full h-full object-cover"
         src="/backgroundVideo.mp4"
+        role="video"
       >
         <source src="/backgroundVideo.mp4" type="video/mp4" />
         Your browser does not support the video tag.

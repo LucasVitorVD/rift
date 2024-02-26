@@ -1,10 +1,45 @@
 import '@testing-library/jest-dom'
 import { render, fireEvent, waitFor } from '@testing-library/react'
 import SignUpForm from '@/components/form/SignUpForm'
+import { AuthContextProvider } from '@/context/AuthContext'
+import { signInWithEmailAndPassword, getAuth, onAuthStateChanged } from 'firebase/auth'
+import { useRouter, useSearchParams } from 'next/navigation'
+
+jest.mock("firebase/auth", () => ({
+  signInWithEmailAndPassword: jest.fn(),
+  getAuth: jest.fn(),
+  onAuthStateChanged: jest.fn((auth, callback) => {
+    const unsubscribe = jest.fn();
+    callback()
+    return unsubscribe;
+  }),
+}));
+
+jest.mock('next/navigation', () => {
+  return {
+    __esModule: true,
+    usePathname: () => ({ pathname: '' }),
+    useRouter: () => ({
+      push: jest.fn(),
+      replace: jest.fn(),
+      prefetch: jest.fn()
+    }),
+    useSearchParams: () => ({ get: () => {} }),
+    useServerInsertedHTML: jest.fn()
+  };
+});
+
+const MockSignUpForm = () => {
+  return (
+    <AuthContextProvider>
+      <SignUpForm />
+    </AuthContextProvider>
+  )
+}
 
 describe("SignUp form component", () => {
   it("should render form", () => {
-    const { queryByRole } = render(<SignUpForm />)
+    const { queryByRole } = render(<MockSignUpForm />)
 
     const button = queryByRole("button", { name: "Criar conta" })
 
@@ -12,7 +47,7 @@ describe("SignUp form component", () => {
   })
 
   it("should render validation errors if inputs values are not correct", async () => {
-    const { queryAllByTestId, queryByRole } = render(<SignUpForm />)
+    const { queryAllByTestId, queryByRole } = render(<MockSignUpForm />)
 
     const inputs = queryAllByTestId("signUpInput")
 
@@ -29,7 +64,7 @@ describe("SignUp form component", () => {
   })
 
   it("should render validation error if password inputs value are not the same", async () => {
-    const { queryAllByTestId, queryByRole } = render(<SignUpForm />)
+    const { queryAllByTestId, queryByRole } = render(<MockSignUpForm />)
 
     const inputs = queryAllByTestId("signUpInput")
 
@@ -50,7 +85,7 @@ describe("SignUp form component", () => {
   })
 
   it("should not render validation errors if inputs value are correct", async () => {
-    const { queryAllByTestId, queryByRole } = render(<SignUpForm />)
+    const { queryAllByTestId, queryByRole } = render(<MockSignUpForm />)
 
     const inputs = queryAllByTestId("signUpInput")
 

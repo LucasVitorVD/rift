@@ -23,13 +23,13 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${poppins.variable} font-poppins antialiased flex flex-col flex-1 min-h-screen`}
       >
-        <Toaster richColors position="bottom-right" />
+        <Toaster richColors position="bottom-right" data-testid="toast" />
         <AuthContextProvider>
-        <SkeletonTheme baseColor="#333333 " highlightColor="#666666">
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </SkeletonTheme>
+          <SkeletonTheme baseColor="#333333 " highlightColor="#666666">
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </SkeletonTheme>
         </AuthContextProvider>
       </body>
     </html>

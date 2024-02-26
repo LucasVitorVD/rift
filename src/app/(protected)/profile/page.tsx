@@ -33,7 +33,7 @@ export default function ProfilePage() {
             </AvatarFallback>
           </Avatar>
           <div>
-            <h1 className="text-3xl font-bold">Olá {user?.displayName},</h1>
+            <h1 className="text-3xl font-bold">Olá{` ${user?.displayName}`},</h1>
             <p>Veja, crie e gerencie suas recomendações aqui!</p>
           </div>
         </div>

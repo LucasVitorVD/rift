@@ -52,8 +52,12 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     }
   }
 
-  const logOut = () => {
-    signOut(auth)
+  const logOut = async () => {
+    try {
+      await signOut(auth)
+    } catch (error) {
+      throw new Error("Erro ao fazer logout. Tente novamente mais tarde.")
+    }
   }
 
   useEffect(() => {
@@ -73,11 +77,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
 };
 
 export const useAuthContext = () => {
-  const context = useContext(AuthContext);
-
-  if (!context) {
-    throw new Error("useAuthContext must be used within an AuthContextProvider");
-  }
+  const context = useContext(AuthContext)!
   
   return context;
 };
