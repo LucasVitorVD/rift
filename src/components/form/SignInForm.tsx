@@ -94,7 +94,7 @@ export default function SignInForm() {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full py-6" disabled={form.formState.isSubmitting}>
+        <Button type="submit" className="w-full py-6" disabled={form.formState.isSubmitting} role="signInButton">
           {form.formState.isSubmitting ? <Loader /> : <p>Entrar</p>}
         </Button>
       </form>

@@ -11,13 +11,16 @@ interface ProtectedLayoutProps {
 export default function ProtectedLayout({ children }: ProtectedLayoutProps) {
   const { user, loading } = useAuthContext()
 
-  if (loading) { return (
-    <div className="grid place-items-center mt-8">
-      <Loader />
-    </div>
-  )}
+  if (loading) { 
+    return (
+      <div className="grid place-items-center mt-8">
+        <Loader />
+      </div>  
+    )
+  }
 
   if (!user) {return <AuthGuard />}
+  
 
   return children
 }
