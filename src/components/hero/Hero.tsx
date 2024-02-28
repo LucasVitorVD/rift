@@ -23,7 +23,7 @@ export default function Hero() {
         </div>
 
         <div className="space-x-6">
-          <Link href="#">
+          <Link href="/profile?r=true">
             <Button>
               <Plus size="20px" className="mr-1" />
               Fazer recomendação

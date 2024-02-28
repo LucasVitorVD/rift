@@ -19,5 +19,12 @@ export const signUpSchema = z.object({
   path: ["confirmPassword"]
 })
 
+export const recommendationSchema = z.object({
+  recommendationCategory: z.enum(["book", "song", "tv-show"], { required_error: "Campo obrigatório!" }),
+  searchRecommendation: z.string({ required_error: "Campo obrigatório!" }),
+  personalComment: z.string().max(200, "Limite de caracteres atingido").optional(),
+})
+
 export type SignInType = z.infer<typeof signInSchema>
 export type SignUpType = z.infer<typeof signUpSchema>
+export type RecommendationType = z.infer<typeof recommendationSchema>
