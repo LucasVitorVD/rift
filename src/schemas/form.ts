@@ -21,7 +21,7 @@ export const signUpSchema = z.object({
 
 export const recommendationSchema = z.object({
   recommendationCategory: z.enum(["book", "song", "tv-show"], { required_error: "Campo obrigatório!" }),
-  searchRecommendation: z.string({ required_error: "Campo obrigatório!" }),
+  searchTerm: z.string({ required_error: "Campo obrigatório!" }),
   personalComment: z.string().max(200, "Limite de caracteres atingido").optional(),
 })
 
