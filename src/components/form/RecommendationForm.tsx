@@ -12,15 +12,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-} from "@/components/ui/command";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -31,23 +23,19 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import Loader from "../loader/Loader";
+import { Search } from "lucide-react";
 
 export default function RecommendationForm() {
   const form = useForm<RecommendationType>({
     resolver: zodResolver(recommendationSchema),
-    defaultValues: {
-      recommendationCategory: "book",
-      searchRecommendation: "",
-      personalComment: ""
-    }
   });
 
-  const searchValue = form.watch("searchRecommendation", "");
+  const searchTerm = form.watch("searchTerm", "");
 
   function handleCreateRecommendation(values: RecommendationType) {
     console.log(values);
 
-    toast.success("Recomendação adicionada!")
+    toast.success("Recomendação adicionada!");
   }
 
   return (
@@ -66,6 +54,7 @@ export default function RecommendationForm() {
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  {...field}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione uma categoria" />
@@ -84,29 +73,27 @@ export default function RecommendationForm() {
 
         <FormField
           control={form.control}
-          name="searchRecommendation"
+          name="searchTerm"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Pesquisar Recomendação</FormLabel>
               <FormControl>
-                <Command>
-                  <CommandInput
-                    placeholder="Digite o nome ou termo de pesquisa"
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  />
-                  {searchValue && (
-                    <CommandList>
-                      <CommandEmpty>Sem resultados.</CommandEmpty>
-                      <CommandGroup heading="Resultados">
-                        <CommandItem>Calendar</CommandItem>
-                        <CommandItem>Search Emoji</CommandItem>
-                        <CommandItem>Calculator</CommandItem>
-                      </CommandGroup>
-                      <CommandSeparator />
-                    </CommandList>
+                <div className="w-full relative">
+                  <div className={`flex items-center ${searchTerm !== "" ? "rounded-t-md" : "rounded-md"} border border-input shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary pl-2 overflow-hidden`}>
+                    <Search className="text-muted-foreground" />
+                    <Input
+                      className="border-none focus-visible:ring-0"
+                      placeholder="Digite o nome ou termo de pesquisa"
+                      {...field}
+                    />
+                  </div>
+
+                  {searchTerm !== "" && (
+                    <div className="z-10 w-full h-56 absolute top-[37px] rounded-b-md bg-white border-2 border-input shadow-sm transition-colors">
+                      No results
+                    </div>
                   )}
-                </Command>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
