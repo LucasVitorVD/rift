@@ -24,17 +24,58 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import Loader from "../loader/Loader";
 import { Search } from "lucide-react";
+import useGetResults from "@/hooks/useGetResults";
+import { useQueryClient } from "@tanstack/react-query";
+import SearchResult from "../search-result/SearchResult";
+import useDebounce from "@/hooks/useDebounce";
+
+{
+  /* TODO: criar objeto com os dados desejados */
+}
+{
+  /* TODO: adicionar dados no db */
+}
+{
+  /* TODO: refatorar esse componente!!! */
+}
 
 export default function RecommendationForm() {
   const form = useForm<RecommendationType>({
     resolver: zodResolver(recommendationSchema),
+    defaultValues: {
+      recommendationCategory: "book",
+      searchTerm: "",
+      personalComment: "",
+    },
   });
 
-  const searchTerm = form.watch("searchTerm", "");
+  const searchTerm = useDebounce(form.watch("searchTerm", ""));
+  const category = form.watch("recommendationCategory", "book");
+  const queryClient = useQueryClient();
 
-  function handleCreateRecommendation(values: RecommendationType) {
-    console.log(values);
+  const {
+    data: results,
+    isLoading,
+    isError,
+    error,
+  } = useGetResults(category, searchTerm);
 
+  console.log(results);
+
+  if (isError) {
+    toast.error(error.message);
+  }
+
+  function handleCategoryChange() {
+    queryClient.invalidateQueries({
+      predicate: (query) =>
+        query.queryKey[0] === "spotifyTracks" &&
+        query.queryKey[1] === searchTerm,
+    });
+    form.setValue("searchTerm", "");
+  }
+
+  async function handleCreateRecommendation(values: RecommendationType) {
     toast.success("Recomendação adicionada!");
   }
 
@@ -52,7 +93,10 @@ export default function RecommendationForm() {
               <FormLabel>Categoria</FormLabel>
               <FormControl>
                 <Select
-                  onValueChange={field.onChange}
+                  onValueChange={(value) => {
+                    field.onChange(value);
+                    handleCategoryChange();
+                  }}
                   defaultValue={field.value}
                   {...field}
                 >
@@ -79,7 +123,11 @@ export default function RecommendationForm() {
               <FormLabel>Pesquisar Recomendação</FormLabel>
               <FormControl>
                 <div className="w-full relative">
-                  <div className={`flex items-center ${searchTerm !== "" ? "rounded-t-md" : "rounded-md"} border border-input shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary pl-2 overflow-hidden`}>
+                  <div
+                    className={`flex items-center ${
+                      searchTerm !== "" ? "rounded-t-md" : "rounded-md"
+                    } border border-input shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary pl-2 overflow-hidden`}
+                  >
                     <Search className="text-muted-foreground" />
                     <Input
                       className="border-none focus-visible:ring-0"
@@ -88,9 +136,23 @@ export default function RecommendationForm() {
                     />
                   </div>
 
-                  {searchTerm !== "" && (
-                    <div className="z-10 w-full h-56 absolute top-[37px] rounded-b-md bg-white border-2 border-input shadow-sm transition-colors">
-                      No results
+                  {searchTerm && (
+                    <div className="z-10 w-full h-56 absolute top-[37px] rounded-b-md bg-white border-2 border-input shadow-sm transition-colors overflow-y-scroll space-y-4">
+                      {isLoading && <Loader />}
+
+                      {!isLoading && results && results.length > 0 ? (
+                        results.map((result) => (
+                          <SearchResult
+                            key={result.id}
+                            id={result.id}
+                            name={result.name}
+                            image={result.image}
+                            description={result.description}
+                          />
+                        ))
+                      ) : (
+                        <p>Sem Resultados</p>
+                      )}
                     </div>
                   )}
                 </div>
