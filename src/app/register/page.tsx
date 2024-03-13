@@ -2,7 +2,7 @@ import FormTabs from "@/components/form-tabs/FormTabs";
 import Loader from "@/components/loader/Loader";
 import { Suspense } from "react";
 
-export default function RegisterPage() {
+export default async function RegisterPage() {
   return (
     <section className="flex items-center justify-center h-screen bg-primary">
       <div className="flex justify-center absolute w-5/6 pb-10 bg-white rounded-md shadow-md z-10 overflow-hidden md:w-[530px]">

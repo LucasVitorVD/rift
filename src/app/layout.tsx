@@ -3,10 +3,11 @@ import { inter, poppins } from "@/lib/fonts";
 import { Header } from "@/components/header/Header";
 import "./globals.css";
 import Footer from "@/components/footer/Footer";
-import { Toaster } from 'sonner'
+import { Toaster } from "sonner";
 import { AuthContextProvider } from "@/context/AuthContext";
-import { SkeletonTheme } from "react-loading-skeleton"
-import 'react-loading-skeleton/dist/skeleton.css'
+import { SkeletonTheme } from "react-loading-skeleton";
+import TanstackProvider from "@/context/TanstackProvider";
+import "react-loading-skeleton/dist/skeleton.css";
 
 export const metadata: Metadata = {
   title: "RIFT",
@@ -25,11 +26,13 @@ export default function RootLayout({
       >
         <Toaster richColors position="bottom-right" data-testid="toast" />
         <AuthContextProvider>
-          <SkeletonTheme baseColor="#333333 " highlightColor="#666666">
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </SkeletonTheme>
+          <TanstackProvider>
+            <SkeletonTheme baseColor="#333333 " highlightColor="#666666">
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </SkeletonTheme>
+          </TanstackProvider>
         </AuthContextProvider>
       </body>
     </html>

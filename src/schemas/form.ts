@@ -28,3 +28,4 @@ export const recommendationSchema = z.object({
 export type SignInType = z.infer<typeof signInSchema>
 export type SignUpType = z.infer<typeof signUpSchema>
 export type RecommendationType = z.infer<typeof recommendationSchema>
+export type Category = "book" | "song" | "tv-show"

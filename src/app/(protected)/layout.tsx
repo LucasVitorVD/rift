@@ -3,6 +3,7 @@
 import AuthGuard from "@/components/auth-guard/AuthGuard"
 import Loader from "@/components/loader/Loader"
 import { useAuthContext } from "@/context/AuthContext"
+import { SpotifyContextProvider } from "@/context/SpotifyContext"
 
 interface ProtectedLayoutProps {
   children: React.ReactNode
@@ -21,6 +22,9 @@ export default function ProtectedLayout({ children }: ProtectedLayoutProps) {
 
   if (!user) {return <AuthGuard />}
   
-
-  return children
+  return (
+    <SpotifyContextProvider>
+      {children}
+    </SpotifyContextProvider>
+  )
 }
