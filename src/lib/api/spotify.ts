@@ -1,7 +1,32 @@
 import { SearchResult } from "@/interfaces/searchResult";
+import { TokenProps } from "@/interfaces/spotify";
+
+export async function getToken() {
+  const response = await fetch("https://accounts.spotify.com/api/token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({
+      grant_type: "client_credentials",
+      client_id: process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID ?? "",
+      client_secret: process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET ?? "",
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Erro ao obter token de acesso: ${response.statusText}`);
+  }
+
+  const token: TokenProps = await response.json();
+
+  localStorage.setItem("spotifyToken", token.access_token)
+
+  return token
+};
 
 export async function getTracks(query: string) {
-  const token = localStorage.getItem("spotifyToken") ?? ""
+  const token = localStorage.getItem("spotifyToken") ?? await getToken()
 
   const response = await fetch(`https://api.spotify.com/v1/search?q=${query.toLowerCase()}&type=track&limit=10&include_external=audio`, {
     method: 'GET',
@@ -17,7 +42,7 @@ export async function getTracks(query: string) {
 
   const data = await response.json()
 
-  const result: SearchResult[] = data.tracks.items.map((item: any) => {
+  const results: SearchResult[] = data.tracks.items.map((item: any) => {
     return {
       id: item.id,
       name: item.name,
@@ -26,5 +51,5 @@ export async function getTracks(query: string) {
     }
   })
 
-  return result
+  return results
 }

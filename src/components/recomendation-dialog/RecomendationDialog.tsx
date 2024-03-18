@@ -48,7 +48,7 @@ export default function RecommendationDialog() {
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Criar recomendação</DialogTitle>
+            <DialogTitle>Adicionar recomendação</DialogTitle>
           </DialogHeader>
 
           <RecommendationForm />
