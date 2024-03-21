@@ -20,7 +20,7 @@ export const signUpSchema = z.object({
 })
 
 export const recommendationFormSchema = z.object({
-  category: z.enum(["book", "song", "tv-show"], { required_error: "Campo obrigatório!" }),
+  category: z.enum(["livro", "música", "filme/série"], { required_error: "Campo obrigatório!" }),
   searchTerm: z.string({ required_error: "Campo obrigatório!" }),
   personalComment: z.string().max(200, "Limite de caracteres atingido").optional(),
 })
@@ -28,4 +28,4 @@ export const recommendationFormSchema = z.object({
 export type SignInType = z.infer<typeof signInSchema>
 export type SignUpType = z.infer<typeof signUpSchema>
 export type RecommendationFormType = z.infer<typeof recommendationFormSchema>
-export type Category = "book" | "song" | "tv-show"
+export type Category = "livro" | "música" | "filme/série"

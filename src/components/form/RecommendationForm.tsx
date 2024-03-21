@@ -33,16 +33,14 @@ import useDebounce from "@/hooks/useDebounce";
 import { useAuthContext } from "@/context/AuthContext";
 import { useState } from "react";
 import SearchResult from "../search-result/SearchResult";
-
-{
-  /* TODO: adicionar dados no db */
-}
+import { db } from "@/firebase/config";
+import { addDoc, collection } from "firebase/firestore"; 
 
 export default function RecommendationForm() {
   const form = useForm<RecommendationFormType>({
     resolver: zodResolver(recommendationFormSchema),
     defaultValues: {
-      category: "book",
+      category: "livro",
       searchTerm: "",
       personalComment: "",
     },
@@ -89,16 +87,21 @@ export default function RecommendationForm() {
       return
     }
 
-    const newRecommendation: RecommendationDataSchemaType = {
-      ...selectedResult,
-      category,
-      personalComment: values.personalComment,
-      userId: user?.uid!
+    try {
+      const recommendation: RecommendationDataSchemaType = {
+        ...selectedResult,
+        category,
+        personalComment: values.personalComment,
+        userId: user?.uid!,
+        userName: user?.displayName
+      }
+
+      await addDoc(collection(db, "recommendations"), recommendation);
+    
+      toast.success("Recomendação adicionada!");
+    } catch (e) {
+      toast.error("Erro ao adicionar recomendação!");
     }
-
-    console.log(newRecommendation)
-
-    toast.success("Recomendação adicionada!");
   }
 
   return (
@@ -127,9 +130,9 @@ export default function RecommendationForm() {
                       <SelectValue placeholder="Selecione uma categoria" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="book">Livro</SelectItem>
-                      <SelectItem value="song">Música</SelectItem>
-                      <SelectItem value="tv-show">Série/Filme</SelectItem>
+                      <SelectItem value="livro">Livro</SelectItem>
+                      <SelectItem value="música">Música</SelectItem>
+                      <SelectItem value="filme/série">Série/Filme</SelectItem>
                     </SelectContent>
                   </Select>
                 </FormControl>
