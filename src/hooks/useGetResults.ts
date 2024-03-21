@@ -7,12 +7,12 @@ const useGetResults = (category: Category, searchTerm: string) => {
     queryKey: ["resultData", searchTerm],
     queryFn: async () => {
       switch (category) {
-        case "book":
+        case "livro":
           // api book...
           break;
-        case "song": 
+        case "música": 
           return await getTracks(searchTerm)
-        case "tv-show":
+        case "filme/série":
           // api tv-show...
         default:
           break;
