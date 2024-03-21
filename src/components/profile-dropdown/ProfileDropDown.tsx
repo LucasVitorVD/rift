@@ -51,7 +51,9 @@ export default function ProfileDropDown() {
           <DropdownMenuContent>
             <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Perfil</DropdownMenuItem>
+            <Link href="/profile">
+              <DropdownMenuItem>Perfil</DropdownMenuItem>
+            </Link>
             <DropdownMenuItem>Minhas recomendações</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
