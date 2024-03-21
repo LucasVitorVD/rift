@@ -18,10 +18,6 @@ export default function useGetRecommendations() {
       try {
         const querySnapshot = await getDocs(q);
 
-        if (querySnapshot.empty || !user) {
-          throw new Error()
-        }
-
         const results: RecommendationDataSchemaType[] = [];
 
         querySnapshot.forEach((doc) => {
