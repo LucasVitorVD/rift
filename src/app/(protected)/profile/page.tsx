@@ -1,7 +1,7 @@
 import ProfileHeader from "@/components/profile-header/ProfileHeader";
 import RecommendationDialog from "@/components/recomendation-dialog/RecomendationDialog";
 import Filters from "@/components/filters/Filters";
-import RecommendationList from "@/components/recommendation-list/RecommendationList";
+import UserRecommendationsList from "@/components/recommendation-list/UserRecommendationsList";
 
 export default function ProfilePage() {
   return (
@@ -15,7 +15,7 @@ export default function ProfilePage() {
 
       <hr />
 
-      <RecommendationList />
+      <UserRecommendationsList />
     </section>
   );
 }

@@ -1,13 +1,44 @@
-import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import Recommendation from "../recommendation/Recommendation";
+import { Category } from "@/schemas/form";
+import { db } from "@/firebase/config";
+import { RecommendationDataSchemaType } from "@/schemas/recommendationSchema";
+import { collection, getDocs, query, where, limit } from "firebase/firestore";
 
-interface ContentSectionProps extends React.ComponentProps<'section'> {
-  title: string,
-  description: string,
-  mainRecomendations?: unknown[]
+interface ContentSectionProps extends React.ComponentProps<"section"> {
+  title: string;
+  description: string;
+  category: Category;
 }
 
-export default function ContentSection({ title, description, mainRecomendations, ...props }: ContentSectionProps) {
+export default async function ContentSection({
+  title,
+  description,
+  category,
+  ...props
+}: ContentSectionProps) {
+  let recommendationsList: RecommendationDataSchemaType[] = [];
+
+  try {
+    const recommendationsRef = collection(db, "recommendations");
+
+    const q = query(
+      recommendationsRef,
+      where("category", "==", category),
+      limit(3)
+    );
+
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach((doc) => {
+      const data = doc.data() as RecommendationDataSchemaType;
+
+      recommendationsList.push(data);
+    });
+  } catch (err) {
+    recommendationsList = []
+  }
+
   return (
     <section
       className="container py-20 space-y-10 border-b-2 border-b-slate-200"
@@ -20,39 +51,22 @@ export default function ContentSection({ title, description, mainRecomendations,
       </div>
 
       <div className="flex flex-col items-center justify-center gap-14 lg:flex-row lg:justify-normal">
-        <div className="space-y-4">
-          <div className="w-[256px] h-[300px] bg-slate-600" /> {/* imagem */}
-          <div>
-            <h3>Título</h3>
-            <p>Indicado por: Nome</p>
-          </div>
-          <Button variant="outline">Ver mais</Button>
-        </div>
+        {recommendationsList && recommendationsList.length > 0 ? (
+          recommendationsList.map((recommendation) => (
+            <Recommendation key={recommendation.id} data={recommendation} />
+          ))
+        ) : (
+          <p>Sem recomendações. Seja o primeiro a recomendar algo!</p>
+        )}
 
-        <div className="space-y-4">
-          <div className="w-[256px] h-[300px] bg-slate-600" /> {/* imagem */}
-          <div>
-            <h3>Título</h3>
-            <p>Indicado por: Nome</p>
+        {recommendationsList.length > 0 && (
+          <div className="flex flex-col items-center hover:cursor-pointer group lg:-translate-y-12">
+            <ArrowRight className="size-10 text-primary" />
+            <span className="text-xs font-medium group-hover:underline">
+              Ver todas as recomendações
+            </span>
           </div>
-          <Button variant="outline">Ver mais</Button>
-        </div>
-
-        <div className="space-y-4">
-          <div className="w-[256px] h-[300px] bg-slate-600" /> {/* imagem */}
-          <div>
-            <h3>Título</h3>
-            <p>Indicado por: Nome</p>
-          </div>
-          <Button variant="outline">Ver mais</Button>
-        </div>
-
-        <div className="flex flex-col items-center hover:cursor-pointer group lg:-translate-y-12">
-          <ArrowRight className="size-10 text-primary" />
-          <span className="text-xs font-medium group-hover:underline">
-            Ver todas as recomendações
-          </span>
-        </div>
+        )}
       </div>
     </section>
   );

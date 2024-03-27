@@ -1,16 +1,13 @@
 "use client"
 
-import useGetRecommendations from "@/hooks/useGetRecommedations";
+import useGetUserRecommendations from "@/hooks/useGetUserRecommendations";
 import Recommendation from "../recommendation/Recommendation";
-import Loader from "../loader/Loader";
 
-export default function RecommendationList() {
-  const { recommendations, isLoading } = useGetRecommendations()
+export default function UserRecommendationsList() {
+  const { recommendations } = useGetUserRecommendations()
 
   return (
     <div className="flex items-baseline flex-wrap gap-10">
-      {isLoading && <Loader></Loader>}
-
       {recommendations && recommendations.length > 0 ? (
         recommendations.map((recommendation) => (
           <Recommendation 
