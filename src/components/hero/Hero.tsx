@@ -1,15 +1,14 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import heroImage from "../../../public/hero-2.jpg";
 import { Plus, ChevronDown } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section
-      className="h-screen bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${heroImage.src})` }}
-    >
-      <div className="flex flex-col items-center justify-center gap-4 w-full h-full bg-black/50">
+    <section className="h-screen relative">
+      <Image src={heroImage.src} alt="Imagem decorativa" fill={true} className="h-full w-full" />
+      <div className="flex flex-col items-center justify-center gap-4 w-full h-full bg-black/50 absolute top-0">
         <div className="text-center space-y-5 w-min">
           <h1 className="text-secondary text-4xl font-bold md:text-6xl lg:text-7xl">
             RECOMENDAÇÕES
