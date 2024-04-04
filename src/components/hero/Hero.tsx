@@ -6,7 +6,7 @@ import { Plus, ChevronDown } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section className="h-screen relative">
+    <section className="h-screen w-screen">
       <Image src={heroImage.src} alt="Imagem decorativa" fill={true} className="h-full w-full" />
       <div className="flex flex-col items-center justify-center gap-4 w-full h-full bg-black/50 absolute top-0">
         <div className="text-center space-y-5 w-min">

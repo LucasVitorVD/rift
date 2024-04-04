@@ -60,7 +60,7 @@ export default function ContentSection({
     >
       <div className="space-y-6">
         <div className="w-14 h-1 bg-primary" />
-        <h2 className="text-5xl font-bold">{title}</h2>
+        <h2 className="text-2xl font-bold md:text-5xl">{title}</h2>
         <p className="text-sm font-medium">{description}</p>
       </div>
 
