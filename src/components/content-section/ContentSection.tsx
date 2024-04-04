@@ -1,9 +1,12 @@
+"use client"
+
 import { ArrowRight } from "lucide-react";
 import Recommendation from "../recommendation/Recommendation";
 import { Category } from "@/schemas/form";
 import { db } from "@/firebase/config";
 import { RecommendationDataSchemaType } from "@/schemas/recommendationSchema";
 import { collection, getDocs, query, where, limit } from "firebase/firestore";
+import { useEffect, useState } from "react";
 
 interface ContentSectionProps extends React.ComponentProps<"section"> {
   title: string;
@@ -11,33 +14,44 @@ interface ContentSectionProps extends React.ComponentProps<"section"> {
   category: Category;
 }
 
-export default async function ContentSection({
+export default function ContentSection({
   title,
   description,
   category,
   ...props
 }: ContentSectionProps) {
-  let recommendationsList: RecommendationDataSchemaType[] = [];
+  const [recommendationsList, setRecommendationsList] = useState<RecommendationDataSchemaType[]>([]);
 
-  try {
-    const recommendationsRef = collection(db, "recommendations");
+  useEffect(() => {
+    async function getRecommendations() {
+      try {
+        const recommendationsRef = collection(db, "recommendations");
+    
+        const q = query(
+          recommendationsRef,
+          where("category", "==", category),
+          limit(3)
+        );
+    
+        const uniqueUsers = new Set<string>()
+    
+        const querySnapshot = await getDocs(q);
+    
+        querySnapshot.forEach((doc) => {
+          const data = doc.data() as RecommendationDataSchemaType;
+    
+          if (!uniqueUsers.has(data.userId)) {
+            setRecommendationsList([{ ...data, id: doc.id }]);
+            uniqueUsers.add(data.userId);
+          }
+        });
+      } catch (err) {
+        console.log(err)
+      }
+    }
 
-    const q = query(
-      recommendationsRef,
-      where("category", "==", category),
-      limit(3)
-    );
-
-    const querySnapshot = await getDocs(q);
-
-    querySnapshot.forEach((doc) => {
-      const data = doc.data() as RecommendationDataSchemaType;
-
-      recommendationsList.push(data);
-    });
-  } catch (err) {
-    recommendationsList = []
-  }
+    getRecommendations()
+  }, [category])
 
   return (
     <section

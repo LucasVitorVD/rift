@@ -9,17 +9,23 @@ import {
 } from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useSearchParams } from 'next/navigation';
+import { useState, useEffect } from "react";
 import RecommendationForm from "../form/RecommendationForm";
-import { open } from "fs";
 
 export default function RecommendationDialog() {
   const searchParams = useSearchParams();
+  const [shouldOpenModal, setShouldOpenModal] = useState(false);
 
-  const [shouldOpenModal, setShouldOpenModal] = useState(
-    Boolean(searchParams.get("r")) ?? false
-  );
+  useEffect(() => {
+    const recommend = searchParams.get('r')
+
+    if (recommend === 'true') {
+      setShouldOpenModal(true)
+    } else {
+      setShouldOpenModal(false)
+    }
+  }, [searchParams]);
 
   return (
     <Dialog open={shouldOpenModal} onOpenChange={setShouldOpenModal}>

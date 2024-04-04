@@ -1,0 +1,9 @@
+TODOS
+
+1 - get data from diferent users instead all of one user for the initial page
+2 - make the recommendatios page by category
+3 - actions on recommendations (crud)
+4 - fix some front-end issues
+    - modal
+    - section content
+5 - implement the "ver mais" feature

@@ -17,12 +17,10 @@ export default function useGetUserRecommendations() {
       try {
         const querySnapshot = await getDocs(q);
 
-        const results: RecommendationDataSchemaType[] = [];
-
-        querySnapshot.forEach((doc) => {
-          const data = doc.data() as RecommendationDataSchemaType;
-          results.push(data);
-        });
+        const results: RecommendationDataSchemaType[] = querySnapshot.docs.map((doc) => ({
+          ...doc.data() as RecommendationDataSchemaType,
+          id: doc.id
+        }))
 
         setRecommendations(results);
       } catch(error) {

@@ -7,12 +7,13 @@ export default function UserRecommendationsList() {
   const { recommendations } = useGetUserRecommendations()
 
   return (
-    <div className="flex items-baseline flex-wrap gap-10">
+    <div className="flex items-baseline justify-center flex-wrap gap-10">
       {recommendations && recommendations.length > 0 ? (
         recommendations.map((recommendation) => (
           <Recommendation 
             key={recommendation.id}
             data={recommendation}
+            showActions
           />
         ))
       ) : (
