@@ -9,15 +9,15 @@ export default function ProfileHeader() {
 
   return (
     <div className="flex justify-center">
-      <div className="flex items-center gap-6">
-        <Avatar className="size-28">
+      <div className="flex items-center gap-6 flex-wrap">
+        <Avatar className="size-28 mx-auto md:mx-0">
           <AvatarImage src={user?.photoURL ?? ""} />
           <AvatarFallback>
             <User />
           </AvatarFallback>
         </Avatar>
-        <div>
-          <h1 className="text-3xl font-bold">{user?.displayName ? `Olá ${user.displayName}` : "Olá,"}</h1>
+        <div className="text-center md:text-start">
+          <h1 className="text-2xl font-bold md:text-3xl">{user?.displayName ? `Olá ${user.displayName}` : "Olá,"}</h1>
           <p>Veja, crie e gerencie suas recomendações aqui!</p>
         </div>
       </div>

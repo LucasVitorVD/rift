@@ -35,7 +35,7 @@ export default function RecommendationDialog() {
           Fazer recomendação
         </Button>
       </DialogTrigger>
-      <DialogContent className="md:max-h-[97vh] md:overflow-y-scroll">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Adicionar recomendação</DialogTitle>
         </DialogHeader>

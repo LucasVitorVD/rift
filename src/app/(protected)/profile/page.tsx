@@ -8,7 +8,7 @@ export default function ProfilePage() {
     <section className="container pt-6 space-y-10">
       <ProfileHeader />
 
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-8">
         <Filters />
         <RecommendationDialog />
       </div>

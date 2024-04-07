@@ -123,7 +123,7 @@ export default function RecommendationForm({ data }: Props) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleAddRecommendation)}
-        className="space-y-8"
+        className="space-y-8 overflow-y-scroll max-h-[82vh] lg:max-h-full"
       >
         <FormField
           control={form.control}
