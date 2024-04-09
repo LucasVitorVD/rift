@@ -9,12 +9,13 @@ export default function useGetUserRecommendations() {
   const [recommendations, setRecommendations] = useState<RecommendationDataSchemaType[] | undefined>(undefined);
   const { user } = useAuthContext();
 
-  const recommendationsRef = collection(db, "recommendations");
-  const q = query(recommendationsRef, where("userId", "==", user?.uid))
-
   useEffect(() => {
     async function getData() {
       try {
+        const recommendationsRef = collection(db, "recommendations");
+
+        const q = query(recommendationsRef, where("userId", "==", user?.uid))
+
         const querySnapshot = await getDocs(q);
 
         const results: RecommendationDataSchemaType[] = querySnapshot.docs.map((doc) => ({
@@ -31,7 +32,7 @@ export default function useGetUserRecommendations() {
     getData();
 
     return () => {}
-  }, [user, q])
+  }, [])
 
   return { recommendations }
 }

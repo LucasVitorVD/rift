@@ -33,14 +33,14 @@ import useGetResults from "@/hooks/useGetResults";
 import { useQueryClient } from "@tanstack/react-query";
 import useDebounce from "@/hooks/useDebounce";
 import { useAuthContext } from "@/context/AuthContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import SearchResult from "../search-result/SearchResult";
 import { db } from "@/firebase/config";
 import { addDoc, collection, updateDoc, doc } from "firebase/firestore";
 
 interface Props {
-  data?: RecommendationDataSchemaType
+  data?: RecommendationDataSchemaType;
 }
 
 export default function RecommendationForm({ data }: Props) {
@@ -57,17 +57,20 @@ export default function RecommendationForm({ data }: Props) {
     SearchResultSchemaType | undefined
   >(undefined);
 
-  const router = useRouter()
+  const router = useRouter();
   const searchTerm = useDebounce(form.watch("searchTerm"));
   const category = form.watch("category");
   const queryClient = useQueryClient();
 
   const { user } = useAuthContext();
 
-  const {
-    data: results,
-    isLoading
-  } = useGetResults(category, searchTerm);
+  const { data: results, isLoading, isError, error } = useGetResults(category, searchTerm);
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(error.message)
+    }
+  }, [isError, error?.message])
 
   function handleSelectResult(result: SearchResultSchemaType) {
     setSelectedResult(result);
@@ -77,10 +80,11 @@ export default function RecommendationForm({ data }: Props) {
   function handleCategoryChange() {
     queryClient.invalidateQueries({
       predicate: (query) =>
-        query.queryKey[0] === "spotifyTracks" &&
-        query.queryKey[1] === searchTerm,
+        query.queryKey[0] === "resultData" && query.queryKey[1] === searchTerm,
     });
+
     form.setValue("searchTerm", "");
+    setSelectedResult(undefined);
   }
 
   async function handleAddRecommendation(values: RecommendationFormType) {
@@ -99,31 +103,31 @@ export default function RecommendationForm({ data }: Props) {
 
     if (data) {
       try {
-        await updateDoc(doc(db, "recommendations", data.id), recommendation)
-        toast.success("Recomendação atualizada!")
+        await updateDoc(doc(db, "recommendations", data.id), recommendation);
+        toast.success("Recomendação atualizada!");
 
-        return
-      } catch(err) {
-        toast.error("Erro ao atualizar recomendação.")
+        return;
+      } catch (err) {
+        toast.error("Erro ao atualizar recomendação.");
+      }
+    } else {
+      try {
+        await addDoc(collection(db, "recommendations"), recommendation);
+
+        toast.success("Recomendação adicionada!");
+      } catch (e) {
+        toast.error("Erro ao adicionar recomendação!");
       }
     }
 
-    try {
-      await addDoc(collection(db, "recommendations"), recommendation);
-
-      toast.success("Recomendação adicionada!");
-    } catch (e) {
-      toast.error("Erro ao adicionar recomendação!");
-    }
-
-    router.replace("/profile?r=false")
+    router.replace("/profile?r=false");
   }
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleAddRecommendation)}
-        className="space-y-8 overflow-y-scroll max-h-[82vh] lg:max-h-full"
+        className="space-y-8 overflow-y-scroll max-h-[70vh] lg:max-h-full"
       >
         <FormField
           control={form.control}
@@ -171,7 +175,10 @@ export default function RecommendationForm({ data }: Props) {
                     <Search className="text-muted-foreground" />
                     <Input
                       className="border-none focus-visible:ring-0"
-                      placeholder={selectedResult?.name ?? "Digite o nome ou termo de pesquisa"}
+                      placeholder={
+                        selectedResult?.name ??
+                        "Digite o nome ou termo de pesquisa"
+                      }
                       {...field}
                     />
                   </div>

@@ -14,7 +14,7 @@ interface Props {
 export default function Recommendation({ data, showActions }: Props) {
   return (
     <div
-      className="space-y-4 pb-3 rounded-md transition-all hover:shadow-lg hover:translate-x-2 hover:-translate-y-2"
+      className="space-y-4 pb-3 rounded-md shadow-lg transition-all hover:translate-x-2 hover:-translate-y-2"
       key={data.id}
     >
       <Image
@@ -22,7 +22,7 @@ export default function Recommendation({ data, showActions }: Props) {
         alt="Imagem da recomendação"
         height={256}
         width={300}
-        className="rounded-md mx-auto"
+        className={`mx-auto ${data.category === "livro" ? "rounded-t-md" : "rounded-md"}`}
       />
       <div>
         <h3 className="font-bold">{data.name || <Skeleton />}</h3>
@@ -40,9 +40,10 @@ export default function Recommendation({ data, showActions }: Props) {
                 alt="Imagem da recomendação"
                 height={256}
                 width={300}
+                className="rounded-md mx-auto"
               />
               <div>
-                <p className="font-bold text-3xl">{data.name}</p>
+                <p className="font-bold text-3xl mb-4">{data.name}</p>
                 <p>Recomendado por: {data.userName}</p>
                 <p>Categoria: {data.category}</p>
               </div>

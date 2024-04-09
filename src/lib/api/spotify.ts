@@ -37,7 +37,7 @@ export async function getTracks(query: string) {
   })
 
   if (!response.ok) {
-    throw new Error(`Erro ao obter detalhes da música: ${response.statusText}`);
+    throw new Error(`Erro ao obter músicas.`);
   }
 
   const data = await response.json()

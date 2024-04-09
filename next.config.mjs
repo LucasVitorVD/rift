@@ -13,6 +13,12 @@ const nextConfig = {
         hostname: "i.scdn.co",
         port: "",
         pathname: '/image/**',
+      },
+      {
+        protocol: "https",
+        hostname: "covers.openlibrary.org",
+        port: "",
+        pathname: "/b/**"
       }
     ]
   }
