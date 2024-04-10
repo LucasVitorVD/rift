@@ -41,9 +41,10 @@ import { addDoc, collection, updateDoc, doc } from "firebase/firestore";
 
 interface Props {
   data?: RecommendationDataSchemaType;
+  setShouldOpenModal?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function RecommendationForm({ data }: Props) {
+export default function RecommendationForm({ data, setShouldOpenModal }: Props) {
   const form = useForm<RecommendationFormType>({
     resolver: zodResolver(recommendationFormSchema),
     defaultValues: data ?? {
@@ -104,23 +105,27 @@ export default function RecommendationForm({ data }: Props) {
     if (data) {
       try {
         await updateDoc(doc(db, "recommendations", data.id), recommendation);
-        toast.success("Recomendação atualizada!");
 
-        return;
+        toast.success("Recomendação atualizada!");
       } catch (err) {
         toast.error("Erro ao atualizar recomendação.");
-      }
-    } else {
-      try {
-        await addDoc(collection(db, "recommendations"), recommendation);
+      } finally {
+        if (setShouldOpenModal) setShouldOpenModal(false)
 
-        toast.success("Recomendação adicionada!");
-      } catch (e) {
-        toast.error("Erro ao adicionar recomendação!");
+        return
       }
     }
 
-    router.replace("/profile?r=false");
+    try {
+      await addDoc(collection(db, "recommendations"), recommendation);
+
+      toast.success("Recomendação adicionada!");
+    } catch (e) {
+      toast.error("Erro ao adicionar recomendação.");
+    } finally {
+      if (setShouldOpenModal) setShouldOpenModal(false)
+      router.replace("/profile");
+    }
   }
 
   return (
@@ -240,7 +245,7 @@ export default function RecommendationForm({ data }: Props) {
           disabled={form.formState.isSubmitting}
           role="signInButton"
         >
-          {form.formState.isSubmitting ? <Loader /> : <p>Recomendar!</p>}
+          {!form.formState.isSubmitting && !data ? "Recomendar!": "Editar!"}
         </Button>
       </form>
     </Form>

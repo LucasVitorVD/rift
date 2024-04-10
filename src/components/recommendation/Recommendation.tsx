@@ -1,6 +1,5 @@
 import { RecommendationDataSchemaType } from "@/schemas/recommendationSchema";
 import Image from "next/image";
-import { Button } from "../ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -20,9 +19,10 @@ export default function Recommendation({ data, showActions }: Props) {
       <Image
         src={data.image}
         alt="Imagem da recomendação"
-        height={256}
-        width={300}
-        className={`mx-auto ${data.category === "livro" ? "rounded-t-md" : "rounded-md"}`}
+        height="0"
+        width="0"
+        sizes="100vw"
+        className={`mx-auto w-72 h-auto ${data.category === "livro" ? "rounded-t-md" : "rounded-md"}`}
       />
       <div>
         <h3 className="font-bold">{data.name || <Skeleton />}</h3>
@@ -30,17 +30,20 @@ export default function Recommendation({ data, showActions }: Props) {
       </div>
       <div className="flex items-center justify-between px-1">
         <Dialog>
-          <DialogTrigger>
-            <Button variant="outline">Ver mais</Button>
+          <DialogTrigger 
+            className="border border-primary bg-background text-primary shadow-sm p-2 rounded-md transition-colors hover:bg-primary hover:text-secondary"
+          >
+            Ver mais
           </DialogTrigger>
           <DialogContent>
             <div className="grid place-content-center space-y-4">
               <Image
                 src={data.image}
                 alt="Imagem da recomendação"
-                height={256}
-                width={300}
-                className="rounded-md mx-auto"
+                height="0"
+                width="0"
+                sizes="100vw"
+                className="rounded-md mx-auto w-72 h-auto"
               />
               <div>
                 <p className="font-bold text-3xl mb-4">{data.name}</p>

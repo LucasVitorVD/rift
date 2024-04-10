@@ -8,39 +8,26 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useSearchParams } from 'next/navigation';
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import RecommendationForm from "../form/RecommendationForm";
 
 export default function RecommendationDialog() {
   const searchParams = useSearchParams();
-  const [shouldOpenModal, setShouldOpenModal] = useState(false);
-
-  useEffect(() => {
-    const recommend = searchParams.get('r')
-
-    if (recommend === 'true') {
-      setShouldOpenModal(true)
-    } else {
-      setShouldOpenModal(false)
-    }
-  }, [searchParams]);
+  const [shouldOpenModal, setShouldOpenModal] = useState(Boolean(searchParams.get('r')) ?? false);
 
   return (
     <Dialog open={shouldOpenModal} onOpenChange={setShouldOpenModal}>
-      <DialogTrigger>
-        <Button className="flex gap-1">
-          <Plus />
-          Fazer recomendação
-        </Button>
+      <DialogTrigger className="flex gap-1 bg-primary text-primary-foreground p-2 rounded-md shadow hover:opacity-90">
+        <Plus />
+        Fazer recomendação
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Adicionar recomendação</DialogTitle>
         </DialogHeader>
 
-        <RecommendationForm />
+        <RecommendationForm setShouldOpenModal={setShouldOpenModal} />
       </DialogContent>
     </Dialog>
   );

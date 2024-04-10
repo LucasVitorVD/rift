@@ -16,9 +16,10 @@ export default function SearchResult({ result, handleSelectResult }: Props) {
       <Image
         src={result.image}
         alt="imagem da pesquisa"
-        width={64}
-        height={64}
-        className="rounded-md"
+        width="0"
+        height="0"
+        sizes="100vw"
+        className="rounded-md w-16 h-auto"
       />
 
       <div className="space-y-px">

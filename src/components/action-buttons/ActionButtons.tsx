@@ -17,29 +17,31 @@ import { RecommendationDataSchemaType } from "@/schemas/recommendationSchema";
 import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "@/firebase/config";
 import { toast } from "sonner";
+import { useState } from "react";
 
 interface Props {
   data: RecommendationDataSchemaType;
 }
 
 export default function ActionButtons({ data }: Props) {
+  const [shouldOpenModal, setShouldOpenModal] = useState(false);
+
   async function handleDelete() {
     try {
       await deleteDoc(doc(db, "recommendations", data.id));
     } catch (err) {
-      console.log(err);
       toast.error("Erro ao excluir a recomendação.");
     }
   }
 
   return (
     <div className="flex items-center space-x-2">
-      <Dialog>
+      <Dialog open={shouldOpenModal} onOpenChange={setShouldOpenModal}>
         <DialogTrigger>
           <Pencil />
         </DialogTrigger>
         <DialogContent>
-          <RecommendationForm data={data} />
+          <RecommendationForm data={data} setShouldOpenModal={setShouldOpenModal} />
         </DialogContent>
       </Dialog>
 
