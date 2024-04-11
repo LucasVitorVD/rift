@@ -2,11 +2,9 @@
 
 import {
   NavigationMenu,
-  NavigationMenuContent,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger
 } from "@/components/ui/navigation-menu";
 import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 import Link from "next/link";
@@ -14,52 +12,48 @@ import { twMerge } from "tailwind-merge";
 
 interface Props {
   className?: string,
-  setShowModal?: React.Dispatch<boolean>
+  setShowSheet?: React.Dispatch<boolean>
 }
 
-export default function Nav({ className, setShowModal }: Props) {
+export default function Nav({ className, setShowSheet }: Props) {
+  function handleCloseSheet() {
+    if (setShowSheet) {
+      setShowSheet(false)
+    } else {
+      return
+    }
+  }
+
   return (
     <nav className={twMerge(className)}>
       <NavigationMenu>
         <NavigationMenuList>
-          <NavigationMenuItem onClick={() => setShowModal!(false)}>
+          <NavigationMenuItem onClick={handleCloseSheet}>
             <Link href="/" legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                 Início
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger>Recomendações</NavigationMenuTrigger>
-            <NavigationMenuContent onClick={() => setShowModal!(false)}>
-              <Link href="/recommendations/books" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Livros
-                </NavigationMenuLink>
-              </Link>
-              <Link href="/recommendations/songs" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Músicas
-                </NavigationMenuLink>
-              </Link>
-              <Link href="/recommendations/tv" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Séries/Filmes
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-          <NavigationMenuItem onClick={() => setShowModal!(false)}>
-            <Link href="/about" legacyBehavior passHref>
+          <NavigationMenuItem onClick={handleCloseSheet}>
+            <Link href="/recommendations/books" legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Sobre
+                Livros
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
-          <NavigationMenuItem onClick={() => setShowModal!(false)}>
-            <Link href="/contact" legacyBehavior passHref>
+          <NavigationMenuItem onClick={handleCloseSheet}>
+            <Link href="/recommendations/songs" legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Contato
+                Músicas
+              </NavigationMenuLink>
+            </Link>
+          </NavigationMenuItem>
+
+          <NavigationMenuItem onClick={handleCloseSheet}>
+            <Link href="/recommendations/tv" legacyBehavior passHref>
+              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                Filmes/Séries
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>

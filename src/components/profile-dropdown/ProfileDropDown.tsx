@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   DropdownMenu,
@@ -15,9 +15,10 @@ import { useAuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
+import GoogleIcon from "public/google";
 
 export default function ProfileDropDown() {
-  const { user, logOut, loading } = useAuthContext();
+  const { user, logOut, googleSignIn, loading } = useAuthContext();
   const router = useRouter();
 
   async function handleLogout() {
@@ -32,12 +33,25 @@ export default function ProfileDropDown() {
     }
   }
 
+  async function handleSigInWithGoogle() {
+    try {
+      await googleSignIn()
+    } catch (error) {
+      toast.error('Erro ao fazer login. Tente novamente mais tarde.');
+    }
+  }
+
   return (
     <>
       {!loading && !user ? (
-        <Link href="/register">
-          <Button variant="default">Entrar</Button>
-        </Link>
+        <Button
+          variant="ghost"
+          className="flex items-center gap-2 shadow-md py-6"
+          onClick={handleSigInWithGoogle}
+        >
+          <GoogleIcon width={20} height={20} />
+          Entrar com Google
+        </Button>
       ) : (
         <DropdownMenu>
           <DropdownMenuTrigger>
@@ -54,7 +68,6 @@ export default function ProfileDropDown() {
             <Link href="/profile">
               <DropdownMenuItem>Perfil</DropdownMenuItem>
             </Link>
-            <DropdownMenuItem>Minhas recomendações</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={handleLogout}

@@ -17,7 +17,7 @@ export default function FormTabs() {
 
   return (
     <Tabs defaultValue="sign-in" value={currentTab ?? "sign-in"} className="w-full">
-      <TabsList>
+      <TabsList className="md:rounded-md">
         <TabsTrigger value="sign-in" onClick={() => handleTabClick("sign-in")}>
           Login
         </TabsTrigger>

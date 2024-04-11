@@ -6,19 +6,19 @@ export default function Home() {
     <>
       <Hero />
       <ContentSection
-        id="book-section"
+        id="books"
         title="Livros"
         description="Principais livros recomendados."
         category="livro"
       />
       <ContentSection
-        id="song-section"
+        id="songs"
         title="Músicas"
         description="Principais músicas recomendadas."
         category="música"
       />
       <ContentSection
-        id="tv-show-section"
+        id="tv"
         title="Séries/Filmes"
         description="Principais séries e filmes recomendados."
         category="filme/série"

@@ -33,7 +33,7 @@ export default function MobileNav() {
           <Menu />
         </SheetTrigger>
         <SheetContent side="left">
-          <Nav setShowModal={setShowSheet} />
+          <Nav setShowSheet={setShowSheet} />
         </SheetContent>
       </Sheet>
     </div>

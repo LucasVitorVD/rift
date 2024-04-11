@@ -1,15 +1,26 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import heroImage from "../../../public/hero-2.jpg";
 import { Plus, ChevronDown } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section 
-      className="h-screen bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${heroImage.src})` }}
+    <section
+      className="h-screen relative"
     >
-      <div className="flex flex-col items-center justify-center gap-4 w-full h-full bg-black/50">
+      <video
+        autoPlay
+        muted
+        loop
+        preload="none"
+        className="w-full h-full object-cover"
+        src="/backgroundVideo.mp4"
+        role="video"
+      >
+        <source src="/backgroundVideo.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
+      <div className="flex flex-col items-center justify-center gap-4 w-full h-full bg-black/50 absolute top-0">
         <div className="text-center space-y-5 w-min">
           <h1 className="text-secondary text-4xl font-bold md:text-6xl lg:text-7xl">
             RECOMENDAÇÕES
@@ -31,7 +42,7 @@ export default function Hero() {
           </Link>
         </div>
 
-        <Link href="#book-section" className="translate-y-16 text-primary">
+        <Link href="#books" className="translate-y-16 text-primary">
           <ChevronDown size="3rem" className="animate-bounce" />
         </Link>
       </div>

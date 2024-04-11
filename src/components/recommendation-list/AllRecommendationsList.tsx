@@ -13,7 +13,7 @@ export default function AllRecommendationsList({ category }: Props) {
   const { recommendations } = useGetAllRecommendationsByCategory(category)
 
   return (
-    <div className="flex items-baseline flex-wrap gap-10">
+    <div className="flex items-baseline justify-center flex-wrap gap-10">
       {recommendations && recommendations.length > 0 ? (
         recommendations.map((recommendation) => (
           <Recommendation 

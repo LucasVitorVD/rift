@@ -8,6 +8,7 @@ import { RecommendationDataSchemaType } from "@/schemas/recommendationSchema";
 import { collection, getDocs, query, where, limit } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import EmptyState from "../empty-state/EmptyState";
+import Link from "next/link";
 
 interface ContentSectionProps extends React.ComponentProps<"section"> {
   title: string;
@@ -27,30 +28,26 @@ export default function ContentSection({
 
   useEffect(() => {
     async function getRecommendations() {
-      try {
-        const recommendationsRef = collection(db, "recommendations");
+      const recommendationsRef = collection(db, "recommendations");
 
-        const q = query(
-          recommendationsRef,
-          where("category", "==", category),
-          limit(3)
-        );
+      const q = query(
+        recommendationsRef,
+        where("category", "==", category),
+        limit(3)
+      );
 
-        const uniqueUsers = new Set<string>();
+      const uniqueUsers = new Set<string>();
 
-        const querySnapshot = await getDocs(q);
+      const querySnapshot = await getDocs(q);
 
-        querySnapshot.forEach((doc) => {
-          const data = doc.data() as RecommendationDataSchemaType;
+      querySnapshot.forEach((doc) => {
+        const data = doc.data() as RecommendationDataSchemaType;
 
-          if (!uniqueUsers.has(data.userId)) {
-            setRecommendationsList([{ ...data, id: doc.id }]);
-            uniqueUsers.add(data.userId);
-          }
-        });
-      } catch (err) {
-        console.log(err);
-      }
+        if (!uniqueUsers.has(data.userId)) {
+          setRecommendationsList([{ ...data, id: doc.id }]);
+          uniqueUsers.add(data.userId);
+        }
+      });
     }
 
     getRecommendations();
@@ -79,12 +76,12 @@ export default function ContentSection({
         )}
 
         {recommendationsList.length > 0 && (
-          <div className="flex flex-col items-center hover:cursor-pointer group lg:-translate-y-12">
+          <Link href={`/recommendations/${props.id}`} className="flex flex-col items-center hover:cursor-pointer group lg:-translate-y-12">
             <ArrowRight className="size-10 text-primary" />
             <span className="text-xs font-medium group-hover:underline">
               Ver todas as recomendações
             </span>
-          </div>
+          </Link>
         )}
       </div>
     </section>
