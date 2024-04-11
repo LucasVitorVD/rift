@@ -2,6 +2,7 @@
 
 import useGetUserRecommendations from "@/hooks/useGetUserRecommendations";
 import Recommendation from "../recommendation/Recommendation";
+import EmptyState from "../empty-state/EmptyState";
 
 export default function UserRecommendationsList() {
   const { recommendations } = useGetUserRecommendations()
@@ -17,7 +18,9 @@ export default function UserRecommendationsList() {
           />
         ))
       ) : (
-        <p>Sem recomendações!</p>
+        <div className="mx-auto">
+          <EmptyState />
+        </div>
       )}
     </div>
   );

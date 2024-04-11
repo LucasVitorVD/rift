@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { ArrowRight } from "lucide-react";
 import Recommendation from "../recommendation/Recommendation";
@@ -7,6 +7,7 @@ import { db } from "@/firebase/config";
 import { RecommendationDataSchemaType } from "@/schemas/recommendationSchema";
 import { collection, getDocs, query, where, limit } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import EmptyState from "../empty-state/EmptyState";
 
 interface ContentSectionProps extends React.ComponentProps<"section"> {
   title: string;
@@ -20,38 +21,40 @@ export default function ContentSection({
   category,
   ...props
 }: ContentSectionProps) {
-  const [recommendationsList, setRecommendationsList] = useState<RecommendationDataSchemaType[]>([]);
+  const [recommendationsList, setRecommendationsList] = useState<
+    RecommendationDataSchemaType[]
+  >([]);
 
   useEffect(() => {
     async function getRecommendations() {
       try {
         const recommendationsRef = collection(db, "recommendations");
-    
+
         const q = query(
           recommendationsRef,
           where("category", "==", category),
           limit(3)
         );
-    
-        const uniqueUsers = new Set<string>()
-    
+
+        const uniqueUsers = new Set<string>();
+
         const querySnapshot = await getDocs(q);
-    
+
         querySnapshot.forEach((doc) => {
           const data = doc.data() as RecommendationDataSchemaType;
-    
+
           if (!uniqueUsers.has(data.userId)) {
             setRecommendationsList([{ ...data, id: doc.id }]);
             uniqueUsers.add(data.userId);
           }
         });
       } catch (err) {
-        console.log(err)
+        console.log(err);
       }
     }
 
-    getRecommendations()
-  }, [category])
+    getRecommendations();
+  }, [category]);
 
   return (
     <section
@@ -70,7 +73,9 @@ export default function ContentSection({
             <Recommendation key={recommendation.id} data={recommendation} />
           ))
         ) : (
-          <p>Sem recomendações. Seja o primeiro a recomendar algo!</p>
+          <div className="mx-auto">
+            <EmptyState />
+          </div>
         )}
 
         {recommendationsList.length > 0 && (

@@ -32,17 +32,17 @@ export default function Nav({ className, setShowModal }: Props) {
           <NavigationMenuItem>
             <NavigationMenuTrigger>Recomendações</NavigationMenuTrigger>
             <NavigationMenuContent onClick={() => setShowModal!(false)}>
-              <Link href="/livros" legacyBehavior passHref>
+              <Link href="/recommendations/books" legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                   Livros
                 </NavigationMenuLink>
               </Link>
-              <Link href="/songs" legacyBehavior passHref>
+              <Link href="/recommendations/songs" legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                   Músicas
                 </NavigationMenuLink>
               </Link>
-              <Link href="/shows" legacyBehavior passHref>
+              <Link href="/recommendations/tv" legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                   Séries/Filmes
                 </NavigationMenuLink>

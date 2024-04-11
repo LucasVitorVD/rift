@@ -19,10 +19,10 @@ export default function Recommendation({ data, showActions }: Props) {
       <Image
         src={data.image}
         alt="Imagem da recomendação"
-        height="0"
-        width="0"
-        sizes="100vw"
-        className={`mx-auto w-72 h-auto ${data.category === "livro" ? "rounded-t-md" : "rounded-md"}`}
+        height={250}
+        width={250}
+        style={{ maxHeight: 288 }}
+        className={`mx-auto w-auto h-auto ${data.category === "livro" ? "rounded-t-md" : "rounded-md"}`}
       />
       <div>
         <h3 className="font-bold">{data.name || <Skeleton />}</h3>
@@ -40,10 +40,10 @@ export default function Recommendation({ data, showActions }: Props) {
               <Image
                 src={data.image}
                 alt="Imagem da recomendação"
-                height="0"
-                width="0"
+                height={288}
+                width={288}
                 sizes="100vw"
-                className="rounded-md mx-auto w-72 h-auto"
+                className="rounded-md mx-auto w-auto h-auto"
               />
               <div>
                 <p className="font-bold text-3xl mb-4">{data.name}</p>
