@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Plus, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
+import AddRecommendationButton from "../add-recommendation-button/AddRecommendationButton";
 
 export default function Hero() {
   return (
@@ -33,14 +33,7 @@ export default function Hero() {
           </p>
         </div>
 
-        <div className="space-x-6">
-          <Link href="/profile?r=true">
-            <Button>
-              <Plus size="20px" className="mr-1" />
-              Fazer recomendação
-            </Button>
-          </Link>
-        </div>
+        <AddRecommendationButton />
 
         <Link href="#books" className="translate-y-16 text-primary">
           <ChevronDown size="3rem" className="animate-bounce" />

@@ -3,6 +3,7 @@ import Nav from "./Nav";
 import ProfileDropDown from "../profile-dropdown/ProfileDropDown";
 import MobileNav from "./MobileNav";
 import { Suspense } from "react";
+import Loader from "../loader/Loader";
 
 export function Header() {
   return (
@@ -15,7 +16,7 @@ export function Header() {
 
       <Nav className="hidden lg:block" />
 
-      <Suspense fallback={<p>Loading</p>}>
+      <Suspense fallback={<Loader />}>
         <ProfileDropDown />
       </Suspense>
     </header>

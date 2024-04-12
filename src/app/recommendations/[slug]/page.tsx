@@ -11,7 +11,7 @@ const slugMap = {
   "tv": "filme/série"
 }
 
-export default async function AllRecommendations({ params }: Props) {
+export default function AllRecommendations({ params }: Props) {
   const { slug } = params
   
   const category = slugMap[slug as keyof typeof slugMap] as Category

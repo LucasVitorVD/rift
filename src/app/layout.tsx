@@ -29,7 +29,7 @@ export default function RootLayout({
           <TanstackProvider>
             <SkeletonTheme baseColor="#333333 " highlightColor="#666666">
               <Header />
-              <main className="flex-1">{children}</main>
+              <main className="flex flex-col flex-1">{children}</main>
               <Footer />
             </SkeletonTheme>
           </TanstackProvider>
