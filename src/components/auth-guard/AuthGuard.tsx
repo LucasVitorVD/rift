@@ -21,7 +21,7 @@ export default function AuthGuard() {
   return (
     <section className="flex items-center justify-center flex-1 pt-14">
       <div className="flex flex-col items-center gap-4">
-        <Image src={security} alt="Ilustração" width={288} height={288} />
+        <Image src={security} alt="Ilustração" width={288} height={288} sizes="100vw" priority />
 
         <div className="text-center">
           <pre>Você está tentando acessar: {pathname}</pre>

@@ -13,7 +13,7 @@ interface Props {
 export default function Recommendation({ data, showActions }: Props) {
   return (
     <div
-      className="space-y-4 pb-3 rounded-md shadow-lg transition-all hover:translate-x-2 hover:-translate-y-2"
+      className="space-y-4 pb-3 w-80 h-auto rounded-md shadow-lg transition-all hover:translate-x-2 hover:-translate-y-2"
       key={data.id}
     >
       <Image
@@ -24,8 +24,8 @@ export default function Recommendation({ data, showActions }: Props) {
         style={{ maxHeight: 288 }}
         className={`mx-auto w-auto h-auto ${data.category === "livro" ? "rounded-t-md" : "rounded-md"}`}
       />
-      <div>
-        <h3 className="font-bold">{data.name || <Skeleton />}</h3>
+      <div className="px-1">
+        <h3 className="font-bold text-wrap">{data.name || <Skeleton />}</h3>
         <p>{`Recomendado por: ${data.userName}` || <Skeleton />}</p>
       </div>
       <div className="flex items-center justify-between px-1">
@@ -46,7 +46,7 @@ export default function Recommendation({ data, showActions }: Props) {
                 className="rounded-md mx-auto w-auto h-auto"
               />
               <div>
-                <p className="font-bold text-3xl mb-4">{data.name}</p>
+                <p className="font-bold text-3xl mb-4 text-wrap">{data.name}</p>
                 <p>Recomendado por: {data.userName}</p>
                 <p>Categoria: {data.category}</p>
               </div>

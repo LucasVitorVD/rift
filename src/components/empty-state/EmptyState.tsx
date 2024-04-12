@@ -9,6 +9,7 @@ export default function EmptyState() {
         alt="Ilustração"
         width={288}
         height={288}
+        className="h-auto"
       />
 
       <div className="text-center">

@@ -19,6 +19,12 @@ const nextConfig = {
         hostname: "covers.openlibrary.org",
         port: "",
         pathname: "/b/**"
+      },
+      {
+        protocol: "https",
+        hostname: "image.tmdb.org",
+        port: "",
+        pathname: "/t/p/**"
       }
     ]
   }

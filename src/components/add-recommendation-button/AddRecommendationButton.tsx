@@ -8,7 +8,7 @@ import { toast } from "sonner";
 
 export default function AddRecommendationButton() {
   const router = useRouter();
-  const { googleSignIn, user } = useAuthContext();
+  const { googleSignIn, user, loading } = useAuthContext();
 
   async function handleAddRecommendation() {
     if (!user) {
@@ -26,7 +26,7 @@ export default function AddRecommendationButton() {
 
   return (
     <div className="space-x-6">
-      <Button onClick={handleAddRecommendation}>
+      <Button onClick={handleAddRecommendation} disabled={loading}>
         <Plus size="20px" className="mr-1" />
         Fazer recomendação
       </Button>
