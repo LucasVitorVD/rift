@@ -36,8 +36,7 @@ import { useAuthContext } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import SearchResult from "../search-result/SearchResult";
-import { db } from "@/firebase/config";
-import { addDoc, collection, updateDoc, doc } from "firebase/firestore";
+import { addNewRecommendation, updateRecommendation } from "@/lib/actions";
 
 interface Props {
   data?: RecommendationDataSchemaType;
@@ -88,50 +87,38 @@ export default function RecommendationForm({ data, setShouldOpenModal }: Props) 
     setSelectedResult(undefined);
   }
 
-  async function handleAddRecommendation(values: RecommendationFormType) {
+  async function handleSubmit(values: RecommendationFormType) {
     if (selectedResult === undefined) {
       toast.error("Selecione um resultado!");
       return;
     }
 
-    const recommendation: Omit<RecommendationDataSchemaType, "id"> = {
-      ...selectedResult,
-      category,
-      personalComment: values.personalComment,
-      userId: user?.uid!,
-      userName: user?.displayName,
-    };
+    if (!data) {
+      const recommendation: Omit<RecommendationDataSchemaType, "id"> = {
+        ...selectedResult,
+        category,
+        personalComment: values.personalComment,
+        userId: user?.uid!,
+        userName: user?.displayName,
+      };
 
-    if (data) {
-      try {
-        await updateDoc(doc(db, "recommendations", data.id), recommendation);
+      addNewRecommendation(recommendation)
 
-        toast.success("Recomendação atualizada!");
-      } catch (err) {
-        toast.error("Erro ao atualizar recomendação.");
-      } finally {
-        if (setShouldOpenModal) setShouldOpenModal(false)
-
-        return
-      }
-    }
-
-    try {
-      await addDoc(collection(db, "recommendations"), recommendation);
-
-      toast.success("Recomendação adicionada!");
-    } catch (e) {
-      toast.error("Erro ao adicionar recomendação.");
-    } finally {
-      if (setShouldOpenModal) setShouldOpenModal(false)
       router.replace("/profile");
+    } else {
+      const updatedRecommendation = {...selectedResult, category, personalComment: values.personalComment}
+      updateRecommendation(data.id!, updatedRecommendation as RecommendationDataSchemaType)
     }
+
+    if (setShouldOpenModal) setShouldOpenModal(false)
+
+    return
   }
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(handleAddRecommendation)}
+        onSubmit={form.handleSubmit(handleSubmit)}
         className="space-y-8 overflow-y-scroll max-h-[70vh] lg:max-h-full"
       >
         <FormField

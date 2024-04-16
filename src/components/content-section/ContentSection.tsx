@@ -1,14 +1,9 @@
-"use client";
-
 import { ArrowRight } from "lucide-react";
 import Recommendation from "../recommendation/Recommendation";
 import { Category } from "@/schemas/form";
-import { db } from "@/firebase/config";
-import { RecommendationDataSchemaType } from "@/schemas/recommendationSchema";
-import { collection, getDocs, query, where, limit } from "firebase/firestore";
-import { useEffect, useState } from "react";
 import EmptyState from "../empty-state/EmptyState";
 import Link from "next/link";
+import { getInitialRecommendations } from "@/lib/actions";
 
 interface ContentSectionProps extends React.ComponentProps<"section"> {
   title: string;
@@ -16,42 +11,13 @@ interface ContentSectionProps extends React.ComponentProps<"section"> {
   category: Category;
 }
 
-export default function ContentSection({
+export default async function ContentSection({
   title,
   description,
   category,
   ...props
 }: ContentSectionProps) {
-  const [recommendationsList, setRecommendationsList] = useState<
-    RecommendationDataSchemaType[]
-  >([]);
-
-  useEffect(() => {
-    async function getRecommendations() {
-      const recommendationsRef = collection(db, "recommendations");
-
-      const q = query(
-        recommendationsRef,
-        where("category", "==", category),
-        limit(3)
-      );
-
-      const uniqueUsers = new Set<string>();
-
-      const querySnapshot = await getDocs(q);
-
-      querySnapshot.forEach((doc) => {
-        const data = doc.data() as RecommendationDataSchemaType;
-
-        if (!uniqueUsers.has(data.userId)) {
-          setRecommendationsList([{ ...data, id: doc.id }]);
-          uniqueUsers.add(data.userId);
-        }
-      });
-    }
-
-    getRecommendations();
-  }, [category]);
+  const recommendationsList = await getInitialRecommendations(category)
 
   return (
     <section

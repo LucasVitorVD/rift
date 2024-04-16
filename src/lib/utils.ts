@@ -22,3 +22,25 @@ export function handleAuthError(error: AuthError) {
 
   return errorMessages[error.code as keyof errorMessagesInterface] || `Ocorreu algum erro desconhecido! \n Código: ${error.code}`
 }
+
+export const navigationLinks = [
+  {
+    href: "/",
+    label: "Início",
+  },
+  {
+    href: "/recommendations/books",
+    label: "Livros",
+    sectionId: "#books"
+  },
+  {
+    href: "/recommendations/songs",
+    label: "Músicas",
+    sectionId: "#songs"
+  },
+  {
+    href: "/recommendations/tv",
+    label: "Filmes/Séries",
+    sectionId: "#tv"
+  },
+]

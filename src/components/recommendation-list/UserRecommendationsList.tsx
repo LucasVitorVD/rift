@@ -4,8 +4,8 @@ import useGetUserRecommendations from "@/hooks/useGetUserRecommendations";
 import Recommendation from "../recommendation/Recommendation";
 import EmptyState from "../empty-state/EmptyState";
 
-export default function UserRecommendationsList() {
-  const { recommendations } = useGetUserRecommendations()
+export default function UserRecommendationsList({ filter }: { filter?: string }) {
+  const { recommendations } = useGetUserRecommendations(filter)
 
   return (
     <div className="flex items-baseline justify-center flex-wrap gap-10">

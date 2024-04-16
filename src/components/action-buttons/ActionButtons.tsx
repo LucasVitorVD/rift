@@ -14,10 +14,8 @@ import { Trash2, Pencil } from "lucide-react";
 import RecommendationForm from "@/components/form/RecommendationForm";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import { RecommendationDataSchemaType } from "@/schemas/recommendationSchema";
-import { doc, deleteDoc } from "firebase/firestore";
-import { db } from "@/firebase/config";
-import { toast } from "sonner";
 import { useState } from "react";
+import { deleteRecommendation } from "@/lib/actions";
 
 interface Props {
   data: RecommendationDataSchemaType;
@@ -25,14 +23,6 @@ interface Props {
 
 export default function ActionButtons({ data }: Props) {
   const [shouldOpenModal, setShouldOpenModal] = useState(false);
-
-  async function handleDelete() {
-    try {
-      await deleteDoc(doc(db, "recommendations", data.id));
-    } catch (err) {
-      toast.error("Erro ao excluir a recomendação.");
-    }
-  }
 
   return (
     <div className="flex items-center space-x-2">
@@ -57,7 +47,7 @@ export default function ActionButtons({ data }: Props) {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete}>
+            <AlertDialogAction onClick={() => deleteRecommendation(data.id!)}>
               Excluir
             </AlertDialogAction>
           </AlertDialogFooter>

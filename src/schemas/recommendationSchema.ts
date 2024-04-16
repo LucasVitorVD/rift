@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const RecommendationDataSchema = z.object({
-  id: z.string(),
+  id: z.string().nullable(),
   name: z.string(),
   image: z.string(),
   personalComment: z.string().optional(),

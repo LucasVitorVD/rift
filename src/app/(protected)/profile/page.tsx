@@ -3,7 +3,15 @@ import RecommendationDialog from "@/components/recomendation-dialog/Recomendatio
 import Filters from "@/components/filters/Filters";
 import UserRecommendationsList from "@/components/recommendation-list/UserRecommendationsList";
 
-export default function ProfilePage() {
+export default function ProfilePage({
+  searchParams,
+}: {
+  searchParams?: {
+    search?: string;
+  };
+}) {
+  console.log(searchParams?.search)
+
   return (
     <section className="container pt-6 space-y-10">
       <ProfileHeader />
@@ -15,7 +23,7 @@ export default function ProfilePage() {
 
       <hr />
 
-      <UserRecommendationsList />
+      <UserRecommendationsList filter={searchParams?.search} />
     </section>
   );
 }
