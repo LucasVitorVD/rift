@@ -21,8 +21,8 @@ export default function Recommendation({ data, showActions }: Props) {
         alt="Imagem da recomendação"
         height={250}
         width={250}
-        style={{ maxHeight: 288 }}
-        className={`mx-auto w-auto h-auto ${data.category === "livro" ? "rounded-t-md" : "rounded-md"}`}
+        data-category={data.category}
+        className="mx-auto h-auto data-[category=livro]:bookImg data-[category=filme/série]:tvImg data-[category=música]:songImg"
       />
       <div className="px-1">
         <h3 className="font-bold text-wrap">{data.name || <Skeleton />}</h3>
@@ -42,8 +42,7 @@ export default function Recommendation({ data, showActions }: Props) {
                 alt="Imagem da recomendação"
                 height={288}
                 width={288}
-                sizes="100vw"
-                className="rounded-md mx-auto w-auto h-auto"
+                className="rounded-md mx-auto w-auto h-auto max-h-70"
               />
               <div>
                 <p className="font-bold text-3xl mb-4 text-wrap">{data.name}</p>

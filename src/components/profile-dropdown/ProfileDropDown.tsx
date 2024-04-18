@@ -50,7 +50,7 @@ export default function ProfileDropDown() {
           onClick={handleSigInWithGoogle}
         >
           <GoogleIcon width={20} height={20} />
-          Entrar com Google
+          Fazer Login
         </Button>
       ) : (
         <DropdownMenu>

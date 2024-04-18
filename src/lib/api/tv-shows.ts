@@ -3,7 +3,7 @@ import { SearchResultSchemaType } from "@/schemas/searchResult"
 export async function getShows(title: string) {
   const read_access_token = process.env.NEXT_PUBLIC_TMDB_API_READ_ACCESS_TOKEN
 
-  const mediaTypeMap = {
+  const mediaTypeMap: { [key: string]: string } = {
     movie: "Filme",
     tv: "Série"
   }
@@ -27,7 +27,7 @@ export async function getShows(title: string) {
       return {
         name: show.original_title,
         image: `https://image.tmdb.org/t/p/w780${show.poster_path}` ?? "",
-        description: mediaTypeMap[show.media_type as keyof typeof mediaTypeMap] ?? ""
+        description: mediaTypeMap[show.media_type] ?? ""
       }
     })
 

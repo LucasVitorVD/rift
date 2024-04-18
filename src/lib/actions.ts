@@ -14,16 +14,16 @@ export async function getInitialRecommendations(category: Category) {
   );
 
   const recommendations: RecommendationDataSchemaType[] = []
-  const usersId = new Set<string>();
+  const usersIds: { [id: string]: boolean } = {}
 
   const querySnapshot = await getDocs(q);
 
   querySnapshot.forEach((doc) => {
     const data = doc.data() as RecommendationDataSchemaType;
 
-    if (!usersId.has(data.userId)) {
+    if (!usersIds[data.userId]) {
       recommendations.push({ ...data, id: doc.id })
-      usersId.add(data.userId);
+      usersIds[data.userId] = true;
     }
   });
 

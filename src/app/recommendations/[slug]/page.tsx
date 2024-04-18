@@ -5,7 +5,7 @@ interface Props {
   params: { slug: string}
 }
 
-const slugMap = {
+const slugMap: { [slug: string]: string } = {
   "books": "livro",
   "songs": "música",
   "tv": "filme/série"
@@ -14,10 +14,10 @@ const slugMap = {
 export default function AllRecommendations({ params }: Props) {
   const { slug } = params
   
-  const category = slugMap[slug as keyof typeof slugMap] as Category
+  const category = slugMap[slug] as Category
 
   return (
-    <section className="container py-6">
+    <section className="flex items-center justify-center flex-1 container">
       <AllRecommendationsList category={category} />
     </section>
   )

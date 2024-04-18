@@ -119,7 +119,7 @@ export default function RecommendationForm({ data, setShouldOpenModal }: Props) 
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="space-y-8 overflow-y-scroll max-h-[70vh] lg:max-h-full"
+        className="space-y-8 px-1 overflow-y-scroll max-h-[70vh] lg:max-h-full lg:overflow-y-auto"
       >
         <FormField
           control={form.control}

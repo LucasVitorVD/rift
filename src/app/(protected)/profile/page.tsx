@@ -10,10 +10,8 @@ export default function ProfilePage({
     search?: string;
   };
 }) {
-  console.log(searchParams?.search)
-
   return (
-    <section className="container pt-6 space-y-10">
+    <section className="container pt-6 pb-12 space-y-10">
       <ProfileHeader />
 
       <div className="flex items-center justify-between flex-wrap gap-8">

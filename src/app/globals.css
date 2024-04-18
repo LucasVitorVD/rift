@@ -71,7 +71,20 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
+  }
+
+  .bookImg {
+    @apply rounded-t-md w-auto max-h-72
+  }
+
+  .tvImg {
+    @apply rounded-t-md w-auto max-h-70
+  }
+
+  .songImg {
+    @apply rounded-md w-full
   }
 }
