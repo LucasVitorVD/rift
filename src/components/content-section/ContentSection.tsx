@@ -1,9 +1,5 @@
-import { ArrowRight } from "lucide-react";
-import Recommendation from "../recommendation/Recommendation";
 import { Category } from "@/schemas/form";
-import EmptyState from "../empty-state/EmptyState";
-import Link from "next/link";
-import { getInitialRecommendations } from "@/lib/actions";
+import InitialRecommendationsList from "../recommendation-list/InitialRecommendationsList";
 
 interface ContentSectionProps extends React.ComponentProps<"section"> {
   title: string;
@@ -17,8 +13,6 @@ export default async function ContentSection({
   category,
   ...props
 }: ContentSectionProps) {
-  const recommendationsList = await getInitialRecommendations(category)
-
   return (
     <section
       className="container py-20 space-y-10 border-b-2 border-b-slate-200"
@@ -31,24 +25,7 @@ export default async function ContentSection({
       </div>
 
       <div className="flex flex-col items-center justify-center gap-14 lg:flex-row lg:justify-normal">
-        {recommendationsList && recommendationsList.length > 0 ? (
-          recommendationsList.map((recommendation) => (
-            <Recommendation key={recommendation.id} data={recommendation} />
-          ))
-        ) : (
-          <div className="mx-auto">
-            <EmptyState />
-          </div>
-        )}
-
-        {recommendationsList.length > 0 && (
-          <Link href={`/recommendations/${props.id}`} className="flex flex-col items-center hover:cursor-pointer group lg:-translate-y-12">
-            <ArrowRight className="size-10 text-primary" />
-            <span className="text-xs font-medium group-hover:underline">
-              Ver todas as recomendações
-            </span>
-          </Link>
-        )}
+        <InitialRecommendationsList category={category} sectionId={props.id ?? ""} />
       </div>
     </section>
   );
