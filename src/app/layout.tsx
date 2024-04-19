@@ -12,6 +12,9 @@ import "react-loading-skeleton/dist/skeleton.css";
 export const metadata: Metadata = {
   title: "RIFT",
   description: "Veja as principais recomendações da comunidade.",
+  icons: {
+    icon: "/favicon.png"
+  }
 };
 
 export default function RootLayout({

@@ -17,7 +17,7 @@ export default function AllRecommendations({ params }: Props) {
   const category = slugMap[slug] as Category
 
   return (
-    <section className="flex items-center justify-center flex-1 container">
+    <section className="flex items-center justify-center flex-1 container py-6">
       <AllRecommendationsList category={category} />
     </section>
   )

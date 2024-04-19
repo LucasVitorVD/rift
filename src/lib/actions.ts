@@ -36,6 +36,7 @@ export async function addNewRecommendation(recommendation: Omit<RecommendationDa
 
     toast.success("Recomendação adicionada!");
   } catch (e) {
+    console.log(e)
     toast.error("Erro ao adicionar recomendação.");
   }
 }

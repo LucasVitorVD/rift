@@ -9,7 +9,7 @@ export async function getShows(title: string) {
   }
 
   try {
-    const response = await fetch(`https://api.themoviedb.org/3/search/multi?query=${title}&language=pt-BR`, {
+    const response = await fetch(`https://api.themoviedb.org/3/search/multi?query=${title}&language=pt-BR&include_adult=true`, {
       method: 'GET',
       headers: {
         accept: 'application/json',
@@ -23,10 +23,10 @@ export async function getShows(title: string) {
 
     const data = await response.json()
 
-    const results: SearchResultSchemaType[] = data.results.map((show: any) => {
+    const results: SearchResultSchemaType[] = data.results.map((show: any) => {      
       return {
-        name: show.original_title,
-        image: `https://image.tmdb.org/t/p/w780${show.poster_path}` ?? "",
+        name: show.name ?? show.title,
+        image: `https://image.tmdb.org/t/p/w780${show.poster_path ?? show.backdrop_path}` ?? "",
         description: mediaTypeMap[show.media_type] ?? ""
       }
     })
