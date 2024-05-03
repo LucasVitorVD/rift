@@ -32,7 +32,6 @@ import { Search } from "lucide-react";
 import useGetResults from "@/hooks/useGetResults";
 import { useQueryClient } from "@tanstack/react-query";
 import useDebounce from "@/hooks/useDebounce";
-import { useAuthContext } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import SearchResult from "../search-result/SearchResult";
@@ -61,8 +60,6 @@ export default function RecommendationForm({ data, setShouldOpenModal }: Props) 
   const searchTerm = useDebounce(form.watch("searchTerm"));
   const category = form.watch("category");
   const queryClient = useQueryClient();
-
-  const { user } = useAuthContext();
 
   const { data: results, isLoading, isError, error } = useGetResults(category, searchTerm);
 
@@ -98,8 +95,8 @@ export default function RecommendationForm({ data, setShouldOpenModal }: Props) 
         ...selectedResult,
         category,
         personalComment: values.personalComment,
-        userId: user?.uid!,
-        userName: user?.displayName,
+        userId: "",
+        userName: ""
       };
 
       addNewRecommendation(recommendation)

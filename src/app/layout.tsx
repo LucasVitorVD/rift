@@ -4,17 +4,17 @@ import { Header } from "@/components/header/Header";
 import "./globals.css";
 import Footer from "@/components/footer/Footer";
 import { Toaster } from "sonner";
-import { AuthContextProvider } from "@/context/AuthContext";
 import { SkeletonTheme } from "react-loading-skeleton";
 import TanstackProvider from "@/context/TanstackProvider";
+import AuthSessionProvider from "@/context/AuthSessionProvider";
 import "react-loading-skeleton/dist/skeleton.css";
 
 export const metadata: Metadata = {
   title: "RIFT",
   description: "Veja as principais recomendações da comunidade.",
   icons: {
-    icon: "/favicon.png"
-  }
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({
@@ -28,7 +28,7 @@ export default function RootLayout({
         className={`${inter.variable} ${poppins.variable} font-poppins antialiased flex flex-col flex-1 min-h-screen`}
       >
         <Toaster richColors position="bottom-right" data-testid="toast" />
-        <AuthContextProvider>
+        <AuthSessionProvider>
           <TanstackProvider>
             <SkeletonTheme baseColor="#333333 " highlightColor="#666666">
               <Header />
@@ -36,7 +36,7 @@ export default function RootLayout({
               <Footer />
             </SkeletonTheme>
           </TanstackProvider>
-        </AuthContextProvider>
+        </AuthSessionProvider>
       </body>
     </html>
   );

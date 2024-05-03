@@ -3,30 +3,30 @@
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useAuthContext } from "@/context/AuthContext";
 import { toast } from "sonner";
+import { useSession, signIn } from "next-auth/react";
 
 export default function AddRecommendationButton() {
   const router = useRouter();
-  const { googleSignIn, user, loading } = useAuthContext();
+  const session = useSession()
 
   async function handleAddRecommendation() {
-    if (!user) {
-      try {
-        await googleSignIn()
-
-        return
-      } catch (error) {
-        toast.error('Erro ao fazer login. Tente novamente mais tarde.');
-      }
-    } else {
+    if (session.status === "authenticated") {
       router.push("/profile?r=true");
+
+      return
+    }
+
+    try {
+      await signIn("google")
+    } catch (error) {
+      toast.error('Erro ao fazer login. Tente novamente mais tarde.');
     }
   }
 
   return (
     <div className="space-x-6">
-      <Button onClick={handleAddRecommendation} disabled={loading}>
+      <Button onClick={handleAddRecommendation} disabled={session.status === "loading"}>
         <Plus size="20px" className="mr-1" />
         Fazer recomendação
       </Button>

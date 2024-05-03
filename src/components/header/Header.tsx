@@ -1,11 +1,14 @@
 import Link from "next/link";
 import Nav from "./Nav";
+import GoogleAuthButton from "../googleAuthButton/GoogleAuthButton";
 import ProfileDropDown from "../profile-dropdown/ProfileDropDown";
 import MobileNav from "./MobileNav";
-import { Suspense } from "react";
-import Loader from "../loader/Loader";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/api/auth";
 
-export function Header() {
+export async function Header() {
+  const session = await getServerSession(authOptions);
+
   return (
     <header className="flex items-center justify-between px-8 py-6 border-b-2 border-b-slate-200 shadow">
       <MobileNav />
@@ -16,9 +19,11 @@ export function Header() {
 
       <Nav className="hidden lg:block" />
 
-      <Suspense fallback={<Loader />}>
-        <ProfileDropDown />
-      </Suspense>
+      {!session?.user ? (
+        <GoogleAuthButton />
+      ) : (
+        <ProfileDropDown userImg={session.user.image} />
+      )}
     </header>
   );
 }
