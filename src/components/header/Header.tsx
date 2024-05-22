@@ -8,7 +8,7 @@ import { authOptions } from "@/lib/api/auth";
 
 export async function Header() {
   const session = await getServerSession(authOptions);
-
+  
   return (
     <header className="flex items-center justify-between px-8 py-6 border-b-2 border-b-slate-200 shadow">
       <MobileNav />

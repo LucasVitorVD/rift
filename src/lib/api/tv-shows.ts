@@ -1,4 +1,4 @@
-import { SearchResultSchemaType } from "@/schemas/searchResult"
+import { SearchResultProps } from "@/interfaces/recommendationTypes";
 
 export async function getShows(title: string) {
   const read_access_token = process.env.NEXT_PUBLIC_TMDB_API_READ_ACCESS_TOKEN
@@ -23,7 +23,7 @@ export async function getShows(title: string) {
 
     const data = await response.json()
 
-    const results: SearchResultSchemaType[] = data.results.map((show: any) => {      
+    const results: SearchResultProps[] = data.results.map((show: any) => {      
       return {
         name: show.name ?? show.title,
         image: `https://image.tmdb.org/t/p/w780${show.poster_path ?? show.backdrop_path}` ?? "",

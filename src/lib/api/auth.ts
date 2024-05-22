@@ -10,21 +10,24 @@ export const authOptions: NextAuthOptions = {
     })
   ],
   callbacks: {
-    async jwt({ token, account, user }) {
-      if (account) {
-        token.accessToken = account.access_token
+    session: async ({ session, token }) => {
+      if (session?.user) {
+        session.user.id = token.uid;
       }
-      
-      return token
+      return session;
+    },
+
+    jwt: async ({ user, token }) => {
+      if (user) {
+        token.uid = user.id;
+      }
+      return token;
     },
   
-    /* async signIn({ user, account }) {
-      const token = account?.access_token;
-
-      const response = await fetch("http://localhost:8080/users", {
+    async signIn({ user, account }) {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -42,8 +45,12 @@ export const authOptions: NextAuthOptions = {
         console.error("Erro ao salvar o usuário:", response.status);
         return false;
       }
-    }, */
-  }
+    },
+  },
+
+  session: {
+    strategy: 'jwt',
+  },
 }
 
 export default NextAuth(authOptions)

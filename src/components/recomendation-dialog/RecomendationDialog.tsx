@@ -17,18 +17,19 @@ export default function RecommendationDialog() {
   const [shouldOpenModal, setShouldOpenModal] = useState(Boolean(searchParams.get('r')) ?? false);
 
   return (
-    <Dialog open={shouldOpenModal} onOpenChange={setShouldOpenModal}>
-      <DialogTrigger className="flex gap-1 bg-primary text-primary-foreground p-2 rounded-md shadow hover:opacity-90">
-        <Plus />
-        Fazer recomendação
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Adicionar recomendação</DialogTitle>
-        </DialogHeader>
-
-        <RecommendationForm setShouldOpenModal={setShouldOpenModal} />
-      </DialogContent>
-    </Dialog>
+    <div className="flex justify-center md:justify-end">
+      <Dialog open={shouldOpenModal} onOpenChange={setShouldOpenModal}>
+        <DialogTrigger className="flex gap-1 bg-primary text-primary-foreground p-2 rounded-md shadow hover:opacity-90">
+          <Plus />
+          Fazer recomendação
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Adicionar recomendação</DialogTitle>
+          </DialogHeader>
+          <RecommendationForm setShouldOpenModal={setShouldOpenModal} />
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 }

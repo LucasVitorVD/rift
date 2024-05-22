@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html lang="pt-br" className="scroll-smooth">
       <body
-        className={`${inter.variable} ${poppins.variable} font-poppins antialiased flex flex-col flex-1 min-h-screen`}
+        className={`${inter.variable} ${poppins.variable} font-poppins antialiased flex flex-col flex-1 min-h-screen scroll-smooth`}
       >
         <Toaster richColors position="bottom-right" data-testid="toast" />
         <AuthSessionProvider>

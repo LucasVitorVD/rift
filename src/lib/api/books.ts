@@ -1,4 +1,4 @@
-import { SearchResultSchemaType } from "@/schemas/searchResult"
+import { SearchResultProps } from "@/interfaces/recommendationTypes";
 
 export async function getBooks(title: string) {
   try {
@@ -10,7 +10,7 @@ export async function getBooks(title: string) {
     
     const data = await response.json()
 
-    const results: SearchResultSchemaType[] = data.docs.map((book: any) => {
+    const results: SearchResultProps[] = data.docs.map((book: any) => {
       return {
         name: book.title_suggest,
         image: `https://covers.openlibrary.org/b/olid/${book.cover_edition_key}-L.jpg` ?? "",

@@ -1,10 +1,10 @@
-import { SearchResultSchemaType } from "@/schemas/searchResult";
+import { SearchResultProps } from "@/interfaces/recommendationTypes";
 import Image from "next/image";
 import Skeleton from "react-loading-skeleton";
 
 interface Props {
-  result: SearchResultSchemaType
-  handleSelectResult?: (result: SearchResultSchemaType) => void;
+  result: SearchResultProps
+  handleSelectResult?: (result: SearchResultProps) => void;
 }
 
 export default function SearchResult({ result, handleSelectResult }: Props) {

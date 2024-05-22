@@ -1,60 +1,134 @@
-import { db } from "@/firebase/config";
 import { Category } from "@/schemas/form";
-import { RecommendationDataSchemaType } from "@/schemas/recommendationSchema";
-import { collection, query, where, limit, getDocs, addDoc, doc, updateDoc, deleteDoc } from "firebase/firestore";
-import { toast } from "sonner";
+import { UserProps } from "@/interfaces/user";
+import { RecommendationProps } from "@/interfaces/recommendationTypes";
 
-export async function getInitialRecommendations(category: Category) {
-  const recommendationsRef = collection(db, "recommendations");
-
-  const q = query(
-    recommendationsRef,
-    where("category", "==", category),
-    limit(3)
-  );
-
-  const recommendations: RecommendationDataSchemaType[] = []
-  const usersIds: { [id: string]: boolean } = {}
-
-  const querySnapshot = await getDocs(q);
-
-  querySnapshot.forEach((doc) => {
-    const data = doc.data() as RecommendationDataSchemaType;
-
-    if (!usersIds[data.userId]) {
-      recommendations.push({ ...data, id: doc.id })
-      usersIds[data.userId] = true;
-    }
-  });
-
-  return recommendations
+interface CategoryProps {
+  id: number,
+  name: string,
+  recommendations: RecommendationProps[]
 }
 
-export async function addNewRecommendation(recommendation: Omit<RecommendationDataSchemaType, "id">) {
+export async function getUserDetails(id: string) {
   try {
-    await addDoc(collection(db, "recommendations"), recommendation);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${id}`)
 
-    toast.success("Recomendação adicionada!");
-  } catch (e) {
-    console.log(e)
-    toast.error("Erro ao adicionar recomendação.");
+    if (!response.ok) throw new Error()
+      
+    const user: UserProps = await response.json()
+
+    return user
+  } catch (err) {
+    console.error("Erro ao obter dados do usuário.", err)
+    throw new Error("Erro ao obter dados do usuário.")
   }
 }
 
-export async function updateRecommendation(id: string, updatedRecommendation: RecommendationDataSchemaType) {
+export async function getCategoryRecommendations(categoryName: Category) {
   try {
-    await updateDoc(doc(db, "recommendations", id), updatedRecommendation);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories?category=${categoryName}`)
 
-    toast.success("Recomendação atualizada!");
+    if (!response.ok) throw new Error()
+
+    const category: CategoryProps = await response.json()
+
+    const recommendations: RecommendationProps[] = []
+    const userIdSetList = new Set<string>()
+
+    category.recommendations.slice(0, 3).forEach(recommendation => {
+      if (!userIdSetList.has(recommendation.userId)) {
+        userIdSetList.add(recommendation.userId)
+        recommendations.push(recommendation)
+      }
+    })
+
+    return recommendations
+  } catch(err) {
+    console.error("Erro ao obter recomendações da categoria: ", err)
+    throw new Error(`Erro ao obter recomendações da categoria: ${categoryName}`)
+  }
+}
+
+export async function getAllRecommendationsByCategory(categoryName: Category) {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories?category=${categoryName}`)
+
+    if (!response.ok) throw new Error()
+
+    const category: CategoryProps = await response.json()
+
+    return category.recommendations
   } catch (err) {
-    toast.error("Erro ao atualizar recomendação.");
+    console.log("Erro ao obter recomendações.", err)
+    throw new Error("Erro ao obter recomendações.");
+  }
+}
+
+export async function getUserRecommendations(id: string) {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${id}`)
+
+    if (!response.ok) throw new Error()
+
+    const userData: UserProps = await response.json()
+
+    return userData.recommendations
+  } catch (err) {
+    console.error("Erro ao obter recomendações.", err)
+    throw new Error("Erro ao obter recomendações.")
+  }
+}
+
+export async function addNewRecommendation(recommendation: Omit<RecommendationProps, "id">) {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/recommendations`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(recommendation)
+    })
+
+    if (!response.ok) throw new Error()
+
+    const data: RecommendationProps = await response.json()
+
+    return data
+  } catch (err) {
+    console.error("Erro ao adicionar recomendação.", err)
+    throw new Error("Erro ao adicionar recomendação.");
+  }
+}
+
+export async function updateRecommendation(updatedRecommendation: RecommendationProps) {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/recommendations`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(updatedRecommendation)
+    })
+
+    if (!response.ok) throw new Error()
+
+    const data: RecommendationProps = await response.json()
+
+    return data
+  } catch (err) {
+    console.error("Erro ao atualizar recomendação.", err)
+    throw new Error("Erro ao atualizar recomendação.");
   }
 }
 
 export async function deleteRecommendation(id: string) {
   try {
-    await deleteDoc(doc(db, "recommendations", id));
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/recommendations/${id}`, {
+      method: "DELETE",
+    })
+
+    if (!response.ok) throw new Error()
   } catch (err) {
-    toast.error("Erro ao excluir a recomendação.");
+    console.error("Erro ao excluir a recomendação.", err)
+    throw new Error("Erro ao excluir a recomendação.");
   }
 }

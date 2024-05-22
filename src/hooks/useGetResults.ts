@@ -6,7 +6,7 @@ import type { Category } from "@/schemas/form";
 
 const useGetResults = (category: Category, searchTerm: string) => {
   return useQuery({
-    queryKey: ["resultData", searchTerm],
+    queryKey: ["searchData", searchTerm],
     queryFn: async () => {
       switch (category) {
         case "livro":

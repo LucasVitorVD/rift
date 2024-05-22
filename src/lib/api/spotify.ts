@@ -1,4 +1,4 @@
-import { SearchResultSchemaType } from "@/schemas/searchResult";
+import { SearchResultProps } from "@/interfaces/recommendationTypes";
 import { TokenProps } from "@/interfaces/spotify";
 
 export async function getToken() {
@@ -42,7 +42,7 @@ export async function getTracks(query: string) {
 
   const data = await response.json()
 
-  const results: SearchResultSchemaType[] = data.tracks.items.map((item: any) => {
+  const results: SearchResultProps[] = data.tracks.items.map((item: any) => {
     return {
       name: item.name,
       image: item.album?.images[0].url ?? "",
