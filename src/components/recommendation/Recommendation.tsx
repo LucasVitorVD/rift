@@ -30,7 +30,7 @@ export default function Recommendation({ recommendation }: Props) {
       key={recommendation.id}
     >
       <Image
-        src={recommendation.image}
+        src={recommendation.image ?? "https://placehold.co/250x250"}
         alt="Imagem da recomendação"
         height={250}
         width={250}

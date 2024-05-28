@@ -4,11 +4,16 @@ import RecommendationDialog from "@/components/recomendation-dialog/Recomendatio
 import { useSession } from "next-auth/react";
 import { getUserRecommendations } from "@/lib/actions";
 import RecommendationList from "@/components/recommendation-list/RecommendationList";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { User } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import Paginator from "@/components/paginator/Paginator";
 
 export default function ProfilePage() {
+  const params = useSearchParams();
+  const currentPage = Number(params.get("page")) ?? 0
+  const limit = 6
   const session = useSession();
 
   const {
@@ -16,10 +21,11 @@ export default function ProfilePage() {
     error,
     isLoading,
   } = useQuery({
-    queryKey: ["userRecommendations", session.data?.user?.id!],
-    queryFn: () => getUserRecommendations(session.data?.user?.id!),
+    queryKey: ["userRecommendations", session.data?.user?.id!, currentPage],
+    queryFn: () => getUserRecommendations(session.data?.user?.id!, currentPage, limit),
     staleTime: 600000, // 10 min,
     refetchInterval: 300000, // 5 min
+    placeholderData: keepPreviousData
   });
 
   return (
@@ -49,6 +55,12 @@ export default function ProfilePage() {
         recommendations={userRecommendations ?? []}
         status={{ isLoading, error }}
         itemsAt="center"
+      />
+
+      <Paginator 
+        paginationLimit={limit}
+        totalItems={userRecommendations?.length ?? 0} 
+        currentPage={currentPage} 
       />
     </section>
   );

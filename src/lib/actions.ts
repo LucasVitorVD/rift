@@ -2,12 +2,6 @@ import { Category } from "@/schemas/form";
 import { UserProps } from "@/interfaces/user";
 import { RecommendationProps } from "@/interfaces/recommendationTypes";
 
-interface CategoryProps {
-  id: number,
-  name: string,
-  recommendations: RecommendationProps[]
-}
-
 export async function getUserDetails(id: string) {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${id}`)
@@ -23,21 +17,21 @@ export async function getUserDetails(id: string) {
   }
 }
 
-export async function getCategoryRecommendations(categoryName: Category) {
+export async function getCategoryRecommendations(categoryName: Category, limit: number = 3) {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories?category=${categoryName}`)
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/recommendations?category=${categoryName}&size=${limit}`)
 
     if (!response.ok) throw new Error()
 
-    const category: CategoryProps = await response.json()
+    const recommendations: RecommendationProps[] = await response.json()
 
-    const recommendations: RecommendationProps[] = []
+    const recommendationsListSet: RecommendationProps[] = []
     const userIdSetList = new Set<string>()
 
-    category.recommendations.slice(0, 3).forEach(recommendation => {
+    recommendations.forEach(recommendation => {
       if (!userIdSetList.has(recommendation.userId)) {
         userIdSetList.add(recommendation.userId)
-        recommendations.push(recommendation)
+        recommendationsListSet.push(recommendation)
       }
     })
 
@@ -48,30 +42,30 @@ export async function getCategoryRecommendations(categoryName: Category) {
   }
 }
 
-export async function getAllRecommendationsByCategory(categoryName: Category) {
+export async function getAllRecommendationsByCategory(categoryName: Category, page: number = 0, limit: number ) {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories?category=${categoryName}`)
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/recommendations?category=${categoryName}&page=${page}&size=${limit}`)
 
     if (!response.ok) throw new Error()
 
-    const category: CategoryProps = await response.json()
+    const recommendations: RecommendationProps[] = await response.json()
 
-    return category.recommendations
+    return recommendations
   } catch (err) {
     console.log("Erro ao obter recomendações.", err)
     throw new Error("Erro ao obter recomendações.");
   }
 }
 
-export async function getUserRecommendations(id: string) {
+export async function getUserRecommendations(id: string, page: number = 0, limit: number) {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${id}`)
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/recommendations/user/${id}?page=${page}&size=${limit}`)
 
     if (!response.ok) throw new Error()
 
-    const userData: UserProps = await response.json()
+    const userRecommendations: RecommendationProps[] = await response.json()
 
-    return userData.recommendations
+    return userRecommendations
   } catch (err) {
     console.error("Erro ao obter recomendações.", err)
     throw new Error("Erro ao obter recomendações.")

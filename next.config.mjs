@@ -25,7 +25,13 @@ const nextConfig = {
         hostname: "image.tmdb.org",
         port: "",
         pathname: "/t/p/**"
-      }
+      },
+      {
+        protocol: "https",
+        hostname: "placehold.co",
+        port: "",
+        pathname: "/**"
+      },
     ]
   }
 };

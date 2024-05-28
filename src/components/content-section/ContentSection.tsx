@@ -6,7 +6,6 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import RecommendationList from "../recommendation-list/RecommendationList";
 import { useQuery } from "@tanstack/react-query";
-import { useRef } from "react";
 
 interface Props extends React.ComponentProps<"section"> {
   title: string;
@@ -20,23 +19,13 @@ export default function ContentSection({
   category,
   ...props
 }: Props) {
-  const recommendationsCountRef = useRef<number>(0);
-
   const {
     data: recommendations,
     error,
     isLoading,
   } = useQuery({
     queryKey: ["category", category],
-    queryFn: async () => {
-      const data = await getCategoryRecommendations(category);
-
-      if (data) {
-        recommendationsCountRef.current = data.length;
-        return data;
-      }
-    },
-    enabled: recommendationsCountRef.current < 3,
+    queryFn: () => getCategoryRecommendations(category, 3)
   });
 
   return (

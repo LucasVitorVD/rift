@@ -21,8 +21,8 @@ export default function RecommendationList({ recommendations, status, itemsAt }:
 
   return (
     <div
-      data-itemsAt={itemsAt} 
-      className="flex flex-col items-center justify-center gap-14 lg:flex-row lg:flex-wrap lg:items-baseline data-[itemsAt=start]:lg:justify-normal data-[itemsAt=center]:lg:justify-center"
+      data-itemsat={itemsAt} 
+      className="flex flex-col items-center justify-center flex-wrap gap-14 lg:flex-row lg:items-baseline data-[itemsat=start]:lg:justify-normal data-[itemsat=center]:lg:justify-center"
     >
       {recommendations && recommendations.length > 0 ? (
         recommendations.map((recommendation) => (

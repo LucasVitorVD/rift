@@ -17,6 +17,7 @@ import { RecommendationProps } from "@/interfaces/recommendationTypes";
 import { useState } from "react";
 import { deleteRecommendation } from "@/lib/actions";
 import { useSession } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -26,6 +27,8 @@ interface Props {
 
 export default function ActionButtons({ data }: Props) {
   const [shouldOpenModal, setShouldOpenModal] = useState(false);
+  const searchParams = useSearchParams()
+  const currentPage = Number(searchParams.get("page")) ?? 0
   const session = useSession();
   const queryClient = useQueryClient();
 
@@ -34,7 +37,7 @@ export default function ActionButtons({ data }: Props) {
     onSuccess: (result, variables) => {
       const id: string = variables
 
-      queryClient.setQueryData(["userRecommendations", session.data?.user?.id!], (oldData: RecommendationProps[]) => {
+      queryClient.setQueryData(["userRecommendations", session.data?.user?.id!, currentPage], (oldData: RecommendationProps[]) => {
         return oldData.filter(recommendation => recommendation.id !== id)
       })
 

@@ -32,7 +32,7 @@ import { Search } from "lucide-react";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import useDebounce from "@/hooks/useDebounce";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import SearchResult from "../search-result/SearchResult";
 import {
   addNewRecommendation,
@@ -71,6 +71,8 @@ export default function RecommendationForm({
   const [selectedResult, setSelectedResult] = useState<SearchResultProps | null>(previewData ?? null);
   const [showSearchList, setShowSearchList] = useState(false);
 
+  const searchParams = useSearchParams()
+  const currentPage = Number(searchParams.get("page")) ?? 0
   const router = useRouter();
   const searchTerm = useDebounce(form.watch("searchTerm"));
   const category = form.watch("category");
@@ -82,8 +84,8 @@ export default function RecommendationForm({
     onSuccess: (result, variables) => {
       const newRecommendation: RecommendationProps = { id: result.id, ...variables }
 
-      queryClient.setQueryData(["userRecommendations", variables.userId], (oldData: RecommendationProps[]) => {
-        return [ ...oldData, newRecommendation ]
+      queryClient.setQueryData(["userRecommendations", variables.userId, currentPage], (oldData: RecommendationProps[]) => {
+        return [ ...oldData, newRecommendation ].slice(0, 6)
       })
 
       toast.success("Recomendação adicionada!");
@@ -98,7 +100,7 @@ export default function RecommendationForm({
     onSuccess: (_, variables) => {
       const updatedRecommendation: RecommendationProps = { ...variables }
 
-      queryClient.setQueryData(["userRecommendations", variables.userId], (oldData: RecommendationProps[]) => {
+      queryClient.setQueryData(["userRecommendations", variables.userId, currentPage], (oldData: RecommendationProps[]) => {
         return oldData.map((data) => data.id === updatedRecommendation.id ? updatedRecommendation : data)
       })
 
