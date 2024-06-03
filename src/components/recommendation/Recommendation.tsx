@@ -4,7 +4,6 @@ import { RecommendationProps } from "@/interfaces/recommendationTypes";
 import Image from "next/image";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 import ActionButtons from "../action-buttons/ActionButtons";
 import { getUserDetails } from "@/lib/actions";
 import { useQuery } from "@tanstack/react-query";
