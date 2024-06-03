@@ -12,20 +12,18 @@ import Paginator from "@/components/paginator/Paginator";
 
 export default function ProfilePage() {
   const params = useSearchParams();
-  const currentPage = Number(params.get("page")) ?? 0
+  const currentPage = Number(params.get("page")) ?? 1
   const limit = 6
   const session = useSession();
 
   const {
-    data: userRecommendations,
+    data,
     error,
     isLoading,
   } = useQuery({
     queryKey: ["userRecommendations", session.data?.user?.id!, currentPage],
     queryFn: () => getUserRecommendations(session.data?.user?.id!, currentPage, limit),
-    staleTime: 600000, // 10 min,
-    refetchInterval: 300000, // 5 min
-    placeholderData: keepPreviousData
+    placeholderData: keepPreviousData,
   });
 
   return (
@@ -52,15 +50,15 @@ export default function ProfilePage() {
       <hr />
 
       <RecommendationList
-        recommendations={userRecommendations ?? []}
+        recommendations={data?.content ?? []}
         status={{ isLoading, error }}
         itemsAt="center"
       />
 
-      <Paginator 
-        paginationLimit={limit}
-        totalItems={userRecommendations?.length ?? 0} 
-        currentPage={currentPage} 
+      <Paginator
+        totalPages={data?.totalPages ?? 0}
+        isLastPage={data?.last ?? false}
+        currentPage={currentPage}
       />
     </section>
   );

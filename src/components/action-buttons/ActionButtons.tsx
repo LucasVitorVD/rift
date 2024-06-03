@@ -35,11 +35,7 @@ export default function ActionButtons({ data }: Props) {
   const { mutateAsync: deleteRecommendationFn } = useMutation({
     mutationFn: deleteRecommendation,
     onSuccess: (result, variables) => {
-      const id: string = variables
-
-      queryClient.setQueryData(["userRecommendations", session.data?.user?.id!, currentPage], (oldData: RecommendationProps[]) => {
-        return oldData.filter(recommendation => recommendation.id !== id)
-      })
+      queryClient.invalidateQueries({ queryKey: ["userRecommendations", session.data?.user?.id!, currentPage] })
 
       toast.success("Recomendação excluída!");
     },

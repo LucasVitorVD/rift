@@ -1,6 +1,7 @@
 import { Category } from "@/schemas/form";
 import { UserProps } from "@/interfaces/user";
 import { RecommendationProps } from "@/interfaces/recommendationTypes";
+import { ResponseContent } from "@/interfaces/responseContent";
 
 export async function getUserDetails(id: string) {
   try {
@@ -23,15 +24,15 @@ export async function getCategoryRecommendations(categoryName: Category, limit: 
 
     if (!response.ok) throw new Error()
 
-    const recommendations: RecommendationProps[] = await response.json()
+    const responseContent: ResponseContent = await response.json()
 
-    const recommendationsListSet: RecommendationProps[] = []
+    const recommendations: RecommendationProps[] = []
     const userIdSetList = new Set<string>()
 
-    recommendations.forEach(recommendation => {
+    responseContent.content.forEach(recommendation => {
       if (!userIdSetList.has(recommendation.userId)) {
         userIdSetList.add(recommendation.userId)
-        recommendationsListSet.push(recommendation)
+        recommendations.push(recommendation)
       }
     })
 
@@ -48,9 +49,9 @@ export async function getAllRecommendationsByCategory(categoryName: Category, pa
 
     if (!response.ok) throw new Error()
 
-    const recommendations: RecommendationProps[] = await response.json()
+    const responseContent: ResponseContent = await response.json()
 
-    return recommendations
+    return responseContent
   } catch (err) {
     console.log("Erro ao obter recomendações.", err)
     throw new Error("Erro ao obter recomendações.");
@@ -63,9 +64,9 @@ export async function getUserRecommendations(id: string, page: number = 0, limit
 
     if (!response.ok) throw new Error()
 
-    const userRecommendations: RecommendationProps[] = await response.json()
+    const responseContent: ResponseContent = await response.json()
 
-    return userRecommendations
+    return responseContent
   } catch (err) {
     console.error("Erro ao obter recomendações.", err)
     throw new Error("Erro ao obter recomendações.")

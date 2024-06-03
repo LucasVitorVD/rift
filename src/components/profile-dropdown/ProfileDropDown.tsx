@@ -41,7 +41,7 @@ export default function ProfileDropDown({ userImg }: Props) {
         <DropdownMenuContent>
           <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <Link href="/profile">
+          <Link href="/profile?page=1">
             <DropdownMenuItem>Perfil</DropdownMenuItem>
           </Link>
           <DropdownMenuSeparator />

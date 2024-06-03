@@ -82,11 +82,7 @@ export default function RecommendationForm({
   const { mutateAsync: createRecommendationFn } = useMutation({
     mutationFn: addNewRecommendation,
     onSuccess: (result, variables) => {
-      const newRecommendation: RecommendationProps = { id: result.id, ...variables }
-
-      queryClient.setQueryData(["userRecommendations", variables.userId, currentPage], (oldData: RecommendationProps[]) => {
-        return [ ...oldData, newRecommendation ].slice(0, 6)
-      })
+      queryClient.invalidateQueries({ queryKey: ["userRecommendations", variables.userId, currentPage] })
 
       toast.success("Recomendação adicionada!");
     },
@@ -98,11 +94,7 @@ export default function RecommendationForm({
   const { mutateAsync: updateRecommendationFn } = useMutation({
     mutationFn: updateRecommendation,
     onSuccess: (_, variables) => {
-      const updatedRecommendation: RecommendationProps = { ...variables }
-
-      queryClient.setQueryData(["userRecommendations", variables.userId, currentPage], (oldData: RecommendationProps[]) => {
-        return oldData.map((data) => data.id === updatedRecommendation.id ? updatedRecommendation : data)
-      })
+      queryClient.invalidateQueries({ queryKey: ["userRecommendations", variables.userId, currentPage] })
 
       toast.success("Recomendação editada!")
     },
@@ -142,7 +134,7 @@ export default function RecommendationForm({
 
       createRecommendationFn(recommendation as RecommendationProps)
 
-      router.replace("/profile");
+      router.replace("/profile?page=1");
     } else {
       const updatedRecommendation: RecommendationProps = {
         ...previewData,

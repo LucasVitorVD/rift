@@ -10,11 +10,11 @@ import Paginator from "@/components/paginator/Paginator";
 export default function AllRecommendations() {
   const params = useSearchParams();
   const category = params.get("category") as Category;
-  const currentPage = Number(params.get("page")) ?? 0
+  const currentPage = Number(params.get("page")) ?? 1
   const limit = 6
 
   const {
-    data: categoryRecommendations,
+    data,
     error,
     isLoading,
   } = useQuery({
@@ -26,15 +26,15 @@ export default function AllRecommendations() {
   return (
     <section className="flex flex-col items-center justify-center flex-1 container gap-6 py-6">
       <RecommendationList
-        recommendations={categoryRecommendations ?? []}
+        recommendations={data?.content ?? []}
         status={{ isLoading, error }}
         itemsAt="center"
       />
 
       <Paginator 
-        paginationLimit={limit} 
-        totalItems={categoryRecommendations?.length ?? 0}
+        totalPages={data?.totalPages ?? 0}
         currentPage={currentPage}
+        isLastPage={data?.last ?? false}
        />
     </section>
   );
