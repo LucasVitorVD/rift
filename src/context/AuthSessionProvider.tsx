@@ -8,7 +8,7 @@ interface Props {
 
 export default function AuthSessionProvider({ children }: Props) {
   return (
-    <SessionProvider basePath="/api/users">
+    <SessionProvider>
       {children}
     </SessionProvider>
   )
