@@ -56,3 +56,4 @@ Como alternativa, consulte a documentação do GitHub em [como criar uma solicit
 - Back-end: Java, Spring-Boot, JPA, Hibernate, lombok, MySQL.
 
 Mais detalhes do back-end estão disponíveis neste repositório: [API RIFT](https://github.com/LucasVitorVD/api-rift)
+Deploy: [RIFT](https://rift-weld.vercel.app/)
